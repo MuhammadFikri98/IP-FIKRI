@@ -1,0 +1,20 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "database-IP",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "database-IP_test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  }
+}
