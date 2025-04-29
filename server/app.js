@@ -16,6 +16,7 @@ const {
 const AuthController = require("./controllers/AuthController");
 const CollectionController = require("./controllers/CollectionController");
 const GeminiController = require("./controllers/GeminiController");
+const NewsController = require("./controllers/NewsController");
 
 //cors
 app.use(cors());
@@ -53,6 +54,9 @@ app.delete(
   collectionAuthorization,
   CollectionController.delete
 );
+
+// News Recommendation Route
+app.get("/news/recommendations", NewsController.getRecommendedNews);
 
 // Gemini API Routes
 app.post("/gemini/generate", GeminiController.generateContent);
