@@ -50,9 +50,10 @@ class GeminiHelper {
         },
       ];
 
-      // Get the model (gemini-pro is the text model)
+      // Get the model - use gemini-1.5-pro or gemini-1.0-pro instead of gemini-pro
+      // gemini-pro was renamed in newer API versions
       const model = genAI.getGenerativeModel({
-        model: "gemini-pro",
+        model: "gemini-1.5-pro", // Updated model name for newest API
         generationConfig,
         safetySettings,
       });
@@ -64,6 +65,7 @@ class GeminiHelper {
       // Return the generated text
       return response.text();
     } catch (error) {
+      console.error("Gemini API Error:", error);
       // Handle and format Gemini API errors
       throw {
         name: "BadRequest",
