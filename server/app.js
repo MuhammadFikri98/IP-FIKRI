@@ -15,7 +15,7 @@ const {
 
 const AuthController = require("./controllers/AuthController");
 const CollectionController = require("./controllers/CollectionController");
-const NewsController = require("./controllers/NewsController");
+const GeminiController = require("./controllers/GeminiController");
 
 //cors
 app.use(cors());
@@ -54,12 +54,9 @@ app.delete(
   CollectionController.delete
 );
 
-// World News Routes
-app.get(
-  "/users/:userId/news",
-  authentication,
-  NewsController.getNewsByPreferences
-);
+// Gemini API Routes
+app.post("/gemini/generate", GeminiController.generateContent);
+app.post("/gemini/summarize", GeminiController.summarizeNews);
 
 // Error Handler Middleware
 app.use(errorHandler);
