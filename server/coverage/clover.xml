@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745985582861" clover="3.2.0">
-  <project timestamp="1745985582861" name="All files">
-    <metrics statements="291" coveredstatements="288" conditionals="97" coveredconditionals="91" methods="35" coveredmethods="35" elements="423" coveredelements="414" complexity="0" loc="291" ncloc="291" packages="5" files="15" classes="15"/>
+<coverage generated="1746001791232" clover="3.2.0">
+  <project timestamp="1746001791232" name="All files">
+    <metrics statements="314" coveredstatements="293" conditionals="101" coveredconditionals="91" methods="37" coveredmethods="35" elements="452" coveredelements="419" complexity="0" loc="314" ncloc="314" packages="5" files="16" classes="16"/>
     <package name="server">
-      <metrics statements="30" coveredstatements="30" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <metrics statements="31" coveredstatements="31" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
       <file name="app.js" path="C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\app.js">
-        <metrics statements="30" coveredstatements="30" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <metrics statements="31" coveredstatements="31" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="11" type="cond" truecount="2" falsecount="0"/>
         <line num="2" count="9" type="stmt"/>
         <line num="5" count="11" type="stmt"/>
@@ -28,41 +28,55 @@
         <line num="35" count="9" type="stmt"/>
         <line num="38" count="9" type="stmt"/>
         <line num="41" count="9" type="stmt"/>
-        <line num="42" count="9" type="stmt"/>
-        <line num="47" count="9" type="stmt"/>
-        <line num="52" count="9" type="stmt"/>
-        <line num="59" count="9" type="stmt"/>
+        <line num="44" count="9" type="stmt"/>
+        <line num="45" count="9" type="stmt"/>
+        <line num="50" count="9" type="stmt"/>
+        <line num="55" count="9" type="stmt"/>
         <line num="62" count="9" type="stmt"/>
-        <line num="63" count="9" type="stmt"/>
+        <line num="65" count="9" type="stmt"/>
         <line num="66" count="9" type="stmt"/>
-        <line num="68" count="9" type="stmt"/>
+        <line num="69" count="9" type="stmt"/>
+        <line num="71" count="9" type="stmt"/>
       </file>
     </package>
     <package name="server.controllers">
-      <metrics statements="123" coveredstatements="123" conditionals="47" coveredconditionals="45" methods="12" coveredmethods="12"/>
+      <metrics statements="136" coveredstatements="124" conditionals="51" coveredconditionals="45" methods="13" coveredmethods="12"/>
       <file name="AuthController.js" path="C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\AuthController.js">
-        <metrics statements="21" coveredstatements="21" conditionals="8" coveredconditionals="8" methods="2" coveredmethods="2"/>
+        <metrics statements="34" coveredstatements="22" conditionals="12" coveredconditionals="8" methods="3" coveredmethods="2"/>
         <line num="1" count="9" type="stmt"/>
         <line num="2" count="9" type="stmt"/>
         <line num="3" count="9" type="stmt"/>
-        <line num="7" count="8" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
         <line num="8" count="8" type="stmt"/>
         <line num="9" count="8" type="stmt"/>
-        <line num="11" count="2" type="stmt"/>
-        <line num="16" count="6" type="stmt"/>
-        <line num="21" count="10" type="stmt"/>
+        <line num="10" count="8" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="17" count="6" type="stmt"/>
         <line num="22" count="10" type="stmt"/>
-        <line num="24" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="25" count="2" type="stmt"/>
-        <line num="28" count="8" type="cond" truecount="2" falsecount="0"/>
-        <line num="29" count="2" type="stmt"/>
-        <line num="32" count="6" type="stmt"/>
-        <line num="34" count="6" type="cond" truecount="4" falsecount="0"/>
-        <line num="35" count="4" type="stmt"/>
-        <line num="38" count="2" type="stmt"/>
-        <line num="43" count="2" type="stmt"/>
-        <line num="45" count="8" type="stmt"/>
-        <line num="50" count="9" type="stmt"/>
+        <line num="23" count="10" type="stmt"/>
+        <line num="25" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="29" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="35" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="46" count="8" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="88" count="9" type="stmt"/>
       </file>
       <file name="CollectionController.js" path="C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\CollectionController.js">
         <metrics statements="31" coveredstatements="31" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4"/>
@@ -157,8 +171,8 @@
         <line num="87" count="33" type="stmt"/>
         <line num="96" count="5" type="stmt"/>
         <line num="102" count="5" type="stmt"/>
-        <line num="104" count="1" type="stmt"/>
-        <line num="105" count="1" type="stmt"/>
+        <line num="104" count="4" type="stmt"/>
+        <line num="105" count="4" type="stmt"/>
         <line num="110" count="5" type="stmt"/>
         <line num="120" count="3" type="stmt"/>
         <line num="121" count="3" type="cond" truecount="2" falsecount="0"/>
@@ -177,7 +191,7 @@
       </file>
     </package>
     <package name="server.helpers">
-      <metrics statements="50" coveredstatements="50" conditionals="8" coveredconditionals="7" methods="10" coveredmethods="10"/>
+      <metrics statements="59" coveredstatements="53" conditionals="8" coveredconditionals="7" methods="11" coveredmethods="10"/>
       <file name="bcrypt.js" path="C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\bcrypt.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="12" type="stmt"/>
@@ -223,14 +237,26 @@
         <line num="34" count="9" type="stmt"/>
         <line num="55" count="9" type="stmt"/>
         <line num="62" count="9" type="stmt"/>
-        <line num="63" count="5" type="stmt"/>
-        <line num="66" count="5" type="stmt"/>
-        <line num="68" count="5" type="stmt"/>
-        <line num="70" count="5" type="stmt"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="66" count="2" type="stmt"/>
+        <line num="68" count="8" type="stmt"/>
+        <line num="70" count="8" type="stmt"/>
         <line num="78" count="4" type="stmt"/>
         <line num="81" count="4" type="stmt"/>
         <line num="88" count="4" type="stmt"/>
         <line num="92" count="12" type="stmt"/>
+      </file>
+      <file name="googleOauth.js" path="C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\googleOauth.js">
+        <metrics statements="9" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="9" type="stmt"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="27" count="9" type="stmt"/>
       </file>
       <file name="jwt.js" path="C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\jwt.js">
         <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>

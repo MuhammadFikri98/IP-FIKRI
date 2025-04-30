@@ -81,6 +81,61 @@ class DataLoader {
       };
     }
   }
+
+  // Add method to load full country data
+  static loadCountryData() {
+    try {
+      // Load the full country data array
+      return JSON.parse(
+        fs.readFileSync(
+          path.join(__dirname, "../..", "buat di client nanti", "country.json"),
+          "utf8"
+        )
+      );
+    } catch (error) {
+      console.error("Error loading country data:", error);
+      // Return default data if file can't be loaded
+      return [
+        { country: "United States", code: "us" },
+        { country: "United Kingdom", code: "gb" },
+        { country: "Australia", code: "au" },
+        { country: "Canada", code: "ca" },
+        { country: "India", code: "in" },
+        { country: "Japan", code: "jp" },
+        { country: "Indonesia", code: "id" },
+      ];
+    }
+  }
+
+  // Add method to load full language data
+  static loadLanguageData() {
+    try {
+      // Load the full language data array
+      return JSON.parse(
+        fs.readFileSync(
+          path.join(
+            __dirname,
+            "../..",
+            "buat di client nanti",
+            "language.json"
+          ),
+          "utf8"
+        )
+      );
+    } catch (error) {
+      console.error("Error loading language data:", error);
+      // Return default data if file can't be loaded
+      return [
+        { language: "English", code: "en" },
+        { language: "Spanish", code: "es" },
+        { language: "French", code: "fr" },
+        { language: "German", code: "de" },
+        { language: "Italian", code: "it" },
+        { language: "Japanese", code: "ja" },
+        { language: "Indonesian", code: "id" },
+      ];
+    }
+  }
 }
 
 module.exports = DataLoader;
