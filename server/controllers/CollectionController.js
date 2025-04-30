@@ -27,10 +27,9 @@ class CollectionController {
   static async update(req, res, next) {
     try {
       console.log("masuk");
-      
+
       const collectionId = +req.params.id;
       console.log(collectionId);
-      
 
       const collection = await Collection.findByPk(collectionId);
 
@@ -43,7 +42,10 @@ class CollectionController {
 
       await collection.update(req.body);
 
-      res.status(200).json(collection);
+      res.status(200).json({
+        message: "Collection updated successfully",
+        collection,
+      });
     } catch (error) {
       next(error);
     }
@@ -63,7 +65,7 @@ class CollectionController {
 
       await collection.destroy();
       res.status(200).json({
-        message: `Collection with theme ${collection.theme} deleted successfully`,
+        message: "Collection deleted successfully",
       });
     } catch (error) {
       next(error);

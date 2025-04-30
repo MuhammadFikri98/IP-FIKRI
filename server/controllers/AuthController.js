@@ -1,6 +1,7 @@
 const { User } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { comparePassword } = require("../helpers/bcrypt");
+const { verifyGoogleToken } = require("../helpers/googleOauth");
 
 class AuthController {
   static async register(req, res, next) {
@@ -41,6 +42,43 @@ class AuthController {
       });
 
       res.status(200).json({ access_token: access_token });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async googleLogin(req, res, next) {
+    try {
+      const { token } = req.body;
+
+      if (!token) {
+        throw { name: "BadRequest", message: "Google token is required" };
+      }
+
+      // Verifikasi token Google
+      const userData = await verifyGoogleToken(token);
+
+      // Cari user berdasarkan email
+      let user = await User.findOne({ where: { email: userData.email } });
+
+      // Jika user belum terdaftar, buat user baru
+      if (!user) {
+        // Generate random password untuk user baru
+        const randomPassword = Math.random().toString(36).slice(-8);
+
+        user = await User.create({
+          email: userData.email,
+          password: randomPassword, // Akan di-hash oleh hook di model
+        });
+      }
+
+      // Generate access token
+      const access_token = signToken({
+        id: user.id,
+        email: user.email,
+      });
+
+      res.status(200).json({ access_token });
     } catch (error) {
       next(error);
     }

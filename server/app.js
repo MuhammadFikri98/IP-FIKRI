@@ -34,6 +34,9 @@ app.post("/register", AuthController.register);
 // Login Endpoint
 app.post("/login", AuthController.login);
 
+// Google Login Endpoint
+app.post("/google-login", AuthController.googleLogin);
+
 // Protected Routes
 app.use(authentication);
 
