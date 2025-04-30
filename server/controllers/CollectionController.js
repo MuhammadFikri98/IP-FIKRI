@@ -24,6 +24,25 @@ class CollectionController {
     }
   }
 
+  static async findOne(req, res, next) {
+    try {
+      const collectionId = +req.params.id;
+
+      const collection = await Collection.findByPk(collectionId);
+
+      if (!collection) {
+        throw {
+          name: "NotFound",
+          message: `Collection with id ${collectionId} is not found`,
+        };
+      }
+
+      res.status(200).json(collection);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async update(req, res, next) {
     try {
       console.log("masuk");

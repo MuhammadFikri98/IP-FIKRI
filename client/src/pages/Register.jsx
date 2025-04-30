@@ -126,15 +126,7 @@ export default function Register() {
               </Link>
             </p>
 
-            <div className="mt-3 text-center">
-              <Link
-                to="/"
-                className="btn btn-outline-secondary"
-                style={{ borderColor: "#1a3a6c", color: "#1a3a6c" }}
-              >
-                Kembali ke Home
-              </Link>
-            </div>
+        
           </form>
         </div>
       </div>

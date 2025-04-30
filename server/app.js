@@ -47,6 +47,11 @@ app.get(
   userAuthorization,
   CollectionController.findAll
 );
+app.get(
+  "/collections/:id",
+  collectionAuthorization,
+  CollectionController.findOne
+);
 app.put(
   "/collections/:id",
   collectionAuthorization,

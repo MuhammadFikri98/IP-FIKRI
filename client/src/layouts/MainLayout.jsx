@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
-import Navbar from "../compononents/Navbar";
+import Navbar from "../components/Navbar";
 
 
 export default function MainLayout() {

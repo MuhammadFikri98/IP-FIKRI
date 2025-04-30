@@ -4,6 +4,8 @@ import axios from "axios";
 import countries from "../../../buat di client nanti/country.json";
 import languages from "../../../buat di client nanti/language.json";
 import themes from "../../../buat di client nanti/theme.json";
+import Swal from "sweetalert2";
+import Card from "../components/Card";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -15,17 +17,12 @@ export default function Home() {
   });
 
   // Preferences state
-  const [selectedCountries, setSelectedCountries] = useState([]);
-  const [selectedLanguages, setSelectedLanguages] = useState([]);
-  const [selectedThemes, setSelectedThemes] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState("");
 
   // Collections state
   const [collections, setCollections] = useState([]);
-  const [newCollection, setNewCollection] = useState({
-    name: "",
-    description: "",
-  });
-
   // News recommendations state
   const [newsRecommendations, setNewsRecommendations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -88,24 +85,19 @@ export default function Home() {
   };
 
   const handleCreateCollection = async () => {
-    if (!newCollection.name) {
-      setError("Collection name is required");
-      return;
-    }
-
     // Validate that required properties are selected
-    if (selectedCountries.length === 0) {
-      setError("Please select at least one country");
+    if (!selectedCountry) {
+      setError("Silakan pilih negara terlebih dahulu");
       return;
     }
 
-    if (selectedLanguages.length === 0) {
-      setError("Please select at least one language");
+    if (!selectedLanguage) {
+      setError("Silakan pilih bahasa terlebih dahulu");
       return;
     }
 
-    if (selectedThemes.length === 0) {
-      setError("Please select at least one theme");
+    if (!selectedTheme) {
+      setError("Silakan pilih tema terlebih dahulu");
       return;
     }
 
@@ -114,13 +106,10 @@ export default function Home() {
       const token = localStorage.getItem("access_token");
 
       // Properly format the data to meet backend requirements
-      // Just use the first selected items for each category to match the model structure
       const collectionData = {
-        name: newCollection.name,
-        description: newCollection.description,
-        country: selectedCountries[0], // Send the first selected country
-        language: selectedLanguages[0], // Send the first selected language
-        theme: selectedThemes[0], // Send the first selected theme
+        country: selectedCountry,
+        language: selectedLanguage,
+        theme: selectedTheme,
       };
 
       const response = await axios.post(
@@ -134,16 +123,26 @@ export default function Home() {
       );
 
       // Reset form
-      setNewCollection({ name: "", description: "" });
+      setSelectedCountry("");
+      setSelectedLanguage("");
+      setSelectedTheme("");
 
       // Refresh collections
       if (userData.id) {
         fetchCollections(token, userData.id);
       }
 
-      // Show success message
+      // Show success message with SweetAlert2 instead of browser alert
       setError(null);
-      alert("Collection created successfully!");
+
+      Swal.fire({
+        icon: "success",
+        title: "Sukses!",
+        text: "Koleksi berhasil dibuat",
+        confirmButtonColor: "#1a3a6c",
+        timer: 2000,
+        timerProgressBar: true,
+      });
 
       // Move to recommendations tab
       setActiveTab("recommendations");
@@ -153,6 +152,15 @@ export default function Home() {
         "Collection creation error:",
         error.response?.data || error
       );
+
+      // Show error message with SweetAlert2
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: error.response?.data?.message || "Gagal membuat koleksi",
+        confirmButtonColor: "#d33",
+      });
+
       setError(error.response?.data?.message || "Failed to create collection");
     } finally {
       setIsLoading(false);
@@ -291,34 +299,6 @@ export default function Home() {
     ];
   };
 
-  const handleCountrySelection = (countryCode) => {
-    if (selectedCountries.includes(countryCode)) {
-      setSelectedCountries(
-        selectedCountries.filter((code) => code !== countryCode)
-      );
-    } else {
-      setSelectedCountries([...selectedCountries, countryCode]);
-    }
-  };
-
-  const handleLanguageSelection = (languageCode) => {
-    if (selectedLanguages.includes(languageCode)) {
-      setSelectedLanguages(
-        selectedLanguages.filter((code) => code !== languageCode)
-      );
-    } else {
-      setSelectedLanguages([...selectedLanguages, languageCode]);
-    }
-  };
-
-  const handleThemeSelection = (theme) => {
-    if (selectedThemes.includes(theme)) {
-      setSelectedThemes(selectedThemes.filter((t) => t !== theme));
-    } else {
-      setSelectedThemes([...selectedThemes, theme]);
-    }
-  };
-
   // Debug function
   const checkAndClearToken = () => {
     const token = localStorage.getItem("access_token");
@@ -330,6 +310,68 @@ export default function Home() {
       setIsLoggedIn(false);
     } else {
       console.log("Tidak ada token di localStorage");
+    }
+  };
+
+  // Fungsi untuk menghapus koleksi
+  const handleDeleteCollection = async (collectionId) => {
+    try {
+      // Konfirmasi penghapusan dengan SweetAlert2
+      const result = await Swal.fire({
+        title: "Anda yakin?",
+        text: "Koleksi yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      // Jika pengguna membatalkan, tidak melakukan apa-apa
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      setIsLoading(true);
+      const token = localStorage.getItem("access_token");
+
+      // Panggil API untuk menghapus koleksi
+      await axios.delete(
+        `${
+          import.meta.env.VITE_API_URL || "http://localhost:3000"
+        }/collections/${collectionId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // Perbarui daftar koleksi setelah berhasil menghapus
+      if (userData.id) {
+        fetchCollections(token, userData.id);
+      }
+
+      // Tampilkan notifikasi sukses
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Koleksi telah dihapus",
+        confirmButtonColor: "#1a3a6c",
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    } catch (error) {
+      console.error("Delete collection error:", error.response?.data || error);
+
+      // Tampilkan pesan error
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: error.response?.data?.message || "Gagal menghapus koleksi",
+        confirmButtonColor: "#d33",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -624,55 +666,27 @@ export default function Home() {
                             <div className="card h-100">
                               <div className="card-header bg-primary text-white">
                                 <h5 className="mb-0">
-                                  <i className="bi bi-globe me-2"></i>Select
-                                  Countries
+                                  <i className="bi bi-globe me-2"></i>Pilih
+                                  Negara
                                 </h5>
                               </div>
                               <div
                                 className="card-body"
                                 style={{ height: "300px", overflowY: "auto" }}
                               >
-                                <div className="form-check">
-                                  <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="all-countries"
-                                    onChange={(e) => {
-                                      if (e.target.checked) {
-                                        setSelectedCountries(
-                                          countries.map((c) => c.code)
-                                        );
-                                      } else {
-                                        setSelectedCountries([]);
-                                      }
-                                    }}
-                                    checked={
-                                      selectedCountries.length ===
-                                      countries.length
-                                    }
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    htmlFor="all-countries"
-                                  >
-                                    <strong>Select All</strong>
-                                  </label>
-                                </div>
-                                <hr />
                                 {countries.map((country) => (
                                   <div
                                     className="form-check"
                                     key={country.code}
                                   >
                                     <input
-                                      type="checkbox"
+                                      type="radio"
                                       className="form-check-input"
                                       id={`country-${country.code}`}
-                                      checked={selectedCountries.includes(
-                                        country.code
-                                      )}
+                                      name="country-selection"
+                                      checked={selectedCountry === country.code}
                                       onChange={() =>
-                                        handleCountrySelection(country.code)
+                                        setSelectedCountry(country.code)
                                       }
                                     />
                                     <label
@@ -686,8 +700,22 @@ export default function Home() {
                               </div>
                               <div className="card-footer bg-light">
                                 <small>
-                                  <strong>{selectedCountries.length}</strong>{" "}
-                                  countries selected
+                                  {selectedCountry ? (
+                                    <span>
+                                      Negara:{" "}
+                                      <strong>
+                                        {
+                                          countries.find(
+                                            (c) => c.code === selectedCountry
+                                          )?.country
+                                        }
+                                      </strong>
+                                    </span>
+                                  ) : (
+                                    <span className="text-muted">
+                                      Silakan pilih negara
+                                    </span>
+                                  )}
                                 </small>
                               </div>
                             </div>
@@ -697,55 +725,29 @@ export default function Home() {
                             <div className="card h-100">
                               <div className="card-header bg-success text-white">
                                 <h5 className="mb-0">
-                                  <i className="bi bi-translate me-2"></i>Select
-                                  Languages
+                                  <i className="bi bi-translate me-2"></i>Pilih
+                                  Bahasa
                                 </h5>
                               </div>
                               <div
                                 className="card-body"
                                 style={{ height: "300px", overflowY: "auto" }}
                               >
-                                <div className="form-check">
-                                  <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="all-languages"
-                                    onChange={(e) => {
-                                      if (e.target.checked) {
-                                        setSelectedLanguages(
-                                          languages.map((l) => l.code)
-                                        );
-                                      } else {
-                                        setSelectedLanguages([]);
-                                      }
-                                    }}
-                                    checked={
-                                      selectedLanguages.length ===
-                                      languages.length
-                                    }
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    htmlFor="all-languages"
-                                  >
-                                    <strong>Select All</strong>
-                                  </label>
-                                </div>
-                                <hr />
                                 {languages.map((language) => (
                                   <div
                                     className="form-check"
                                     key={language.code}
                                   >
                                     <input
-                                      type="checkbox"
+                                      type="radio"
                                       className="form-check-input"
                                       id={`language-${language.code}`}
-                                      checked={selectedLanguages.includes(
-                                        language.code
-                                      )}
+                                      name="language-selection"
+                                      checked={
+                                        selectedLanguage === language.code
+                                      }
                                       onChange={() =>
-                                        handleLanguageSelection(language.code)
+                                        setSelectedLanguage(language.code)
                                       }
                                     />
                                     <label
@@ -759,8 +761,22 @@ export default function Home() {
                               </div>
                               <div className="card-footer bg-light">
                                 <small>
-                                  <strong>{selectedLanguages.length}</strong>{" "}
-                                  languages selected
+                                  {selectedLanguage ? (
+                                    <span>
+                                      Bahasa:{" "}
+                                      <strong>
+                                        {
+                                          languages.find(
+                                            (l) => l.code === selectedLanguage
+                                          )?.language
+                                        }
+                                      </strong>
+                                    </span>
+                                  ) : (
+                                    <span className="text-muted">
+                                      Silakan pilih bahasa
+                                    </span>
+                                  )}
                                 </small>
                               </div>
                             </div>
@@ -770,51 +786,24 @@ export default function Home() {
                             <div className="card h-100">
                               <div className="card-header bg-danger text-white">
                                 <h5 className="mb-0">
-                                  <i className="bi bi-tags me-2"></i>Select News
-                                  Themes
+                                  <i className="bi bi-tags me-2"></i>Pilih Tema
+                                  Berita
                                 </h5>
                               </div>
                               <div
                                 className="card-body"
                                 style={{ height: "300px", overflowY: "auto" }}
                               >
-                                <div className="form-check">
-                                  <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="all-themes"
-                                    onChange={(e) => {
-                                      if (e.target.checked) {
-                                        setSelectedThemes(
-                                          themes.map((t) => t.theme)
-                                        );
-                                      } else {
-                                        setSelectedThemes([]);
-                                      }
-                                    }}
-                                    checked={
-                                      selectedThemes.length === themes.length
-                                    }
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    htmlFor="all-themes"
-                                  >
-                                    <strong>Select All</strong>
-                                  </label>
-                                </div>
-                                <hr />
                                 {themes.map((theme) => (
                                   <div className="form-check" key={theme.theme}>
                                     <input
-                                      type="checkbox"
+                                      type="radio"
                                       className="form-check-input"
                                       id={`theme-${theme.theme}`}
-                                      checked={selectedThemes.includes(
-                                        theme.theme
-                                      )}
+                                      name="theme-selection"
+                                      checked={selectedTheme === theme.theme}
                                       onChange={() =>
-                                        handleThemeSelection(theme.theme)
+                                        setSelectedTheme(theme.theme)
                                       }
                                     />
                                     <label
@@ -828,8 +817,15 @@ export default function Home() {
                               </div>
                               <div className="card-footer bg-light">
                                 <small>
-                                  <strong>{selectedThemes.length}</strong>{" "}
-                                  themes selected
+                                  {selectedTheme ? (
+                                    <span>
+                                      Tema: <strong>{selectedTheme}</strong>
+                                    </span>
+                                  ) : (
+                                    <span className="text-muted">
+                                      Silakan pilih tema
+                                    </span>
+                                  )}
                                 </small>
                               </div>
                             </div>
@@ -840,9 +836,9 @@ export default function Home() {
                           <button
                             className="btn btn-outline-secondary"
                             onClick={() => {
-                              setSelectedCountries([]);
-                              setSelectedLanguages([]);
-                              setSelectedThemes([]);
+                              setSelectedCountry("");
+                              setSelectedLanguage("");
+                              setSelectedTheme("");
                             }}
                           >
                             <i className="bi bi-arrow-counterclockwise me-1"></i>{" "}
@@ -859,9 +855,9 @@ export default function Home() {
                               className="btn btn-primary"
                               onClick={() => setActiveTab("collections")}
                               disabled={
-                                !selectedCountries.length ||
-                                !selectedLanguages.length ||
-                                !selectedThemes.length
+                                !selectedCountry ||
+                                !selectedLanguage ||
+                                !selectedTheme
                               }
                             >
                               Next <i className="bi bi-arrow-right ms-1"></i>
@@ -895,68 +891,34 @@ export default function Home() {
                         {/* Create New Collection Form */}
                         <div className="card mb-4">
                           <div className="card-header bg-light">
-                            <h5 className="mb-0">Create New Collection</h5>
+                            <h5 className="mb-0">Buat Koleksi Baru</h5>
                           </div>
                           <div className="card-body">
-                            <div className="mb-3">
-                              <label
-                                htmlFor="collectionName"
-                                className="form-label"
-                              >
-                                Collection Name*
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="collectionName"
-                                value={newCollection.name}
-                                onChange={(e) =>
-                                  setNewCollection({
-                                    ...newCollection,
-                                    name: e.target.value,
-                                  })
-                                }
-                                placeholder="e.g., Tech News, Sports Updates, etc."
-                              />
-                            </div>
-                            <div className="mb-3">
-                              <label
-                                htmlFor="collectionDescription"
-                                className="form-label"
-                              >
-                                Description
-                              </label>
-                              <textarea
-                                className="form-control"
-                                id="collectionDescription"
-                                rows="2"
-                                value={newCollection.description}
-                                onChange={(e) =>
-                                  setNewCollection({
-                                    ...newCollection,
-                                    description: e.target.value,
-                                  })
-                                }
-                                placeholder="What kind of news will this collection contain?"
-                              ></textarea>
-                            </div>
                             <div className="alert alert-info">
                               <small>
                                 <i className="bi bi-info-circle me-1"></i>
-                                This collection will include your selected
-                                preferences:
+                                Koleksi ini akan menggunakan preferensi yang
+                                Anda pilih:
                                 <ul className="mb-0 mt-1">
                                   <li>
-                                    <strong>Countries:</strong>{" "}
-                                    {selectedCountries.length} selected
+                                    <strong>Negara:</strong>{" "}
+                                    {selectedCountry
+                                      ? countries.find(
+                                          (c) => c.code === selectedCountry
+                                        )?.country
+                                      : "Belum dipilih"}
                                   </li>
                                   <li>
-                                    <strong>Languages:</strong>{" "}
-                                    {selectedLanguages.length} selected
+                                    <strong>Bahasa:</strong>{" "}
+                                    {selectedLanguage
+                                      ? languages.find(
+                                          (l) => l.code === selectedLanguage
+                                        )?.language
+                                      : "Belum dipilih"}
                                   </li>
                                   <li>
-                                    <strong>Themes:</strong>{" "}
-                                    {selectedThemes.length} selected
+                                    <strong>Tema:</strong>{" "}
+                                    {selectedTheme || "Belum dipilih"}
                                   </li>
                                 </ul>
                               </small>
@@ -967,14 +929,13 @@ export default function Home() {
                               className="btn btn-primary"
                               onClick={handleCreateCollection}
                               disabled={
-                                !newCollection.name ||
-                                !selectedCountries.length ||
-                                !selectedLanguages.length ||
-                                !selectedThemes.length
+                                !selectedCountry ||
+                                !selectedLanguage ||
+                                !selectedTheme
                               }
                             >
-                              <i className="bi bi-plus-circle me-1"></i> Create
-                              Collection
+                              <i className="bi bi-plus-circle me-1"></i> Buat
+                              Koleksi
                             </button>
                           </div>
                         </div>
@@ -994,147 +955,29 @@ export default function Home() {
                                 className="col-md-6 mb-3"
                                 key={collection.id}
                               >
-                                <div
-                                  className="card h-100 border-start border-4"
-                                  style={{ borderLeftColor: "#1a3a6c" }}
-                                >
-                                  <div className="card-header bg-light d-flex align-items-center">
-                                    <div
-                                      className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2"
-                                      style={{
-                                        width: "28px",
-                                        height: "28px",
-                                        minWidth: "28px",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                      }}
-                                    >
-                                      {index + 1}
-                                    </div>
-                                    <h5 className="card-title mb-0">
-                                      <i className="bi bi-collection me-2 text-primary"></i>
-                                      {collection.name}
-                                    </h5>
-                                  </div>
-                                  <div className="card-body">
-                                    {collection.description && (
-                                      <p className="card-text mb-3">
-                                        {collection.description}
-                                      </p>
-                                    )}
-
-                                    <div className="mb-3">
-                                      <div className="d-flex align-items-center mb-2">
-                                        <div
-                                          className="rounded-circle bg-primary d-flex align-items-center justify-content-center me-2"
-                                          style={{
-                                            width: "24px",
-                                            height: "24px",
-                                          }}
-                                        >
-                                          <i className="bi bi-globe text-white small"></i>
-                                        </div>
-                                        <strong>Country:</strong>
-                                      </div>
-                                      <div className="ms-4">
-                                        <span className="badge bg-primary me-1">
-                                          {countries.find(
-                                            (c) => c.code === collection.country
-                                          )?.country || collection.country}
-                                        </span>
-                                      </div>
-                                    </div>
-
-                                    <div className="mb-3">
-                                      <div className="d-flex align-items-center mb-2">
-                                        <div
-                                          className="rounded-circle bg-success d-flex align-items-center justify-content-center me-2"
-                                          style={{
-                                            width: "24px",
-                                            height: "24px",
-                                          }}
-                                        >
-                                          <i className="bi bi-translate text-white small"></i>
-                                        </div>
-                                        <strong>Language:</strong>
-                                      </div>
-                                      <div className="ms-4">
-                                        <span className="badge bg-success me-1">
-                                          {languages.find(
-                                            (l) =>
-                                              l.code === collection.language
-                                          )?.language || collection.language}
-                                        </span>
-                                      </div>
-                                    </div>
-
-                                    <div className="mb-2">
-                                      <div className="d-flex align-items-center mb-2">
-                                        <div
-                                          className="rounded-circle bg-danger d-flex align-items-center justify-content-center me-2"
-                                          style={{
-                                            width: "24px",
-                                            height: "24px",
-                                          }}
-                                        >
-                                          <i className="bi bi-tags text-white small"></i>
-                                        </div>
-                                        <strong>Theme:</strong>
-                                      </div>
-                                      <div className="ms-4">
-                                        <span className="badge bg-danger me-1">
-                                          {collection.theme}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="card-footer bg-transparent d-flex justify-content-between align-items-center">
-                                    <small className="text-muted">
-                                      Created:{" "}
-                                      {new Date(
-                                        collection.createdAt
-                                      ).toLocaleDateString()}
-                                    </small>
-                                    <div>
-                                      <button
-                                        className="btn btn-sm btn-outline-primary me-1"
-                                        title="Edit collection"
-                                      >
-                                        <i className="bi bi-pencil"></i>
-                                      </button>
-                                      <button
-                                        className="btn btn-sm btn-outline-danger"
-                                        title="Delete collection"
-                                      >
-                                        <i className="bi bi-trash"></i>
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
+                                <Card
+                                  collection={collection}
+                                  index={index}
+                                  onDelete={(collectionId) => {
+                                    // Perbarui daftar koleksi secara lokal (opsional)
+                                    setCollections(
+                                      collections.filter(
+                                        (c) => c.id !== collectionId
+                                      )
+                                    );
+                                  }}
+                                  onRefresh={() => {
+                                    const token =
+                                      localStorage.getItem("access_token");
+                                    if (userData.id) {
+                                      fetchCollections(token, userData.id);
+                                    }
+                                  }}
+                                />
                               </div>
                             ))}
                           </div>
                         )}
-
-                        <div className="d-flex justify-content-between mt-4">
-                          <button
-                            className="btn btn-outline-primary"
-                            onClick={() => setActiveTab("preferences")}
-                          >
-                            <i className="bi bi-arrow-left me-1"></i> Back to
-                            Preferences
-                          </button>
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => {
-                              setActiveTab("recommendations");
-                              fetchNewsRecommendations();
-                            }}
-                          >
-                            Get Recommendations{" "}
-                            <i className="bi bi-arrow-right ms-1"></i>
-                          </button>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -1208,6 +1051,11 @@ export default function Home() {
                                         height: "200px",
                                         objectFit: "cover",
                                       }}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src =
+                                          "https://via.placeholder.com/600x400?text=News+Image";
+                                      }}
                                     />
                                   )}
                                   <div className="card-body">
@@ -1238,7 +1086,7 @@ export default function Home() {
                                     </small>
                                     <div>
                                       <a
-                                        href={news.url}
+                                        href={news.url || "#"}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-sm btn-outline-primary me-1"
@@ -1255,27 +1103,27 @@ export default function Home() {
                                 </div>
                               </div>
                             ))}
+
+                            <div className="d-flex justify-content-between mt-4">
+                              <button
+                                className="btn btn-outline-primary"
+                                onClick={() => setActiveTab("collections")}
+                              >
+                                <i className="bi bi-arrow-left me-1"></i> Back
+                                to Collections
+                              </button>
+                              {newsRecommendations.length > 0 && (
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={fetchNewsRecommendations}
+                                >
+                                  <i className="bi bi-arrow-clockwise me-1"></i>{" "}
+                                  Refresh
+                                </button>
+                              )}
+                            </div>
                           </div>
                         )}
-
-                        <div className="d-flex justify-content-between mt-4">
-                          <button
-                            className="btn btn-outline-primary"
-                            onClick={() => setActiveTab("collections")}
-                          >
-                            <i className="bi bi-arrow-left me-1"></i> Back to
-                            Collections
-                          </button>
-                          {newsRecommendations.length > 0 && (
-                            <button
-                              className="btn btn-primary"
-                              onClick={fetchNewsRecommendations}
-                            >
-                              <i className="bi bi-arrow-clockwise me-1"></i>{" "}
-                              Refresh
-                            </button>
-                          )}
-                        </div>
                       </div>
                     </div>
                   </div>
