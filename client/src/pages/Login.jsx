@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -69,7 +70,16 @@ export default function Login() {
       setLoginError(
         error.response?.data?.message ||
           "Login gagal. Periksa email dan password Anda."
+
+          
       );
+
+       Swal.fire({
+              title: "Error!",
+              text: error.response.data.message,
+              icon: "error",
+              confirmButtonText: "Close",
+            });
     }
   };
 
@@ -78,32 +88,50 @@ export default function Login() {
       <div className="row">
         <div
           className="col-6 d-flex align-items-center justify-content-center"
-          style={{ minHeight: "100vh" }}
+          style={{ minHeight: "100vh", backgroundColor: "#1a3a6c" }}
         >
           <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4o2JIRCI-C4Tkw3ulBgKprfup5xFXogeWRUGNj9IDXZbeyHNLUQ&s=10&ec=72940545"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyq39em67_SncwnlkF9OQN90FuLgb292LzZDKCvqtjCXo0hlgdsA&s=10&ec=72940545"
             alt=""
+            className="img-fluid"
+            style={{ maxWidth: "80%" }}
           />
         </div>
         <div
-          className="col-6 d-flex align-items-center bg-warning-subtle"
-          style={{ minHeight: "100vh" }}
+          className="col-6 d-flex align-items-center"
+          style={{
+            minHeight: "100vh",
+            backgroundColor: "#f0f8ff",
+            backgroundImage:
+              "linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%)",
+          }}
         >
           <form
             onSubmit={handleLogin}
-            className="w-75 m-auto d-flex flex-column gap-3"
+            className="w-75 m-auto d-flex flex-column gap-3 p-4 rounded"
+            style={{
+              backgroundColor: "white",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+              border: "1px solid #e0e0e0",
+            }}
           >
-            <h1 className="text-center">Hacktiv Grocery</h1>
+            <h1 className="text-center" style={{ color: "#1a3a6c" }}>
+              NEWS GenAI
+            </h1>
 
             {/* Tampilkan pesan error jika ada */}
             {loginError && (
-              <div className="alert alert-danger" role="alert">
+              <div className="alert alertr" role="alert">
                 {loginError}
               </div>
             )}
 
             <div className="mb-3">
-              <label htmlFor="exampleInputEmail1" className="form-label">
+              <label
+                htmlFor="exampleInputEmail1"
+                className="form-label"
+                style={{ color: "#1a3a6c" }}
+              >
                 Email address
               </label>
               <input
@@ -113,11 +141,16 @@ export default function Login() {
                 aria-describedby="emailHelp"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
+              
+                style={{ borderColor: "#4d79cc" }}
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label">
+              <label
+                htmlFor="exampleInputPassword1"
+                className="form-label"
+                style={{ color: "#1a3a6c" }}
+              >
                 Password
               </label>
               <input
@@ -126,31 +159,47 @@ export default function Login() {
                 id="exampleInputPassword1"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+              
+                style={{ borderColor: "#4d79cc" }}
               />
             </div>
 
-            <button type="submit" className="btn btn-primary w-100 bg-warning">
+            <button
+              type="submit"
+              className="btn text-white w-100"
+              style={{ backgroundColor: "#1a3a6c", borderColor: "#1a3a6c" }}
+            >
               Login
             </button>
 
             <div className="text-center my-3">
-              <p>Atau login dengan</p>
+              <p style={{ color: "#1a3a6c" }}>Atau login dengan</p>
               <div className="d-flex justify-content-center">
                 {/* Google login button */}
                 <div id="google-btn"></div>
               </div>
             </div>
 
-            <p className="text-center">
+            <p className="text-center" style={{ color: "#1a3a6c" }}>
               Don't have an account yet?{" "}
-              <Link to="/register" className="text-decoration-none fw-bold">
+              <Link
+                to="/register"
+                style={{
+                  color: "#4d79cc",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                }}
+              >
                 Register
               </Link>
             </p>
 
             <div className="mt-3 text-center">
-              <Link to="/" className="btn btn-outline-secondary">
+              <Link
+                to="/"
+                className="btn btn-outline-secondary"
+                style={{ borderColor: "#1a3a6c", color: "#1a3a6c" }}
+              >
                 Kembali ke Home
               </Link>
             </div>
