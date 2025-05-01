@@ -163,3 +163,68 @@ describe("Authorization Middleware", () => {
     });
   });
 });
+
+// Additional tests for authorization middleware error handling
+
+describe("Error handling in authorization middleware", () => {
+  let mockApp;
+
+  beforeEach(() => {
+    mockApp = express();
+    mockApp.use(express.json());
+
+    // Clear previous mocks
+    jest.clearAllMocks();
+  });
+
+  test("Should handle errors in collectionAuthorization middleware", async () => {
+    // Setup test route with error-throwing mock
+    mockApp.get(
+      "/test-collection-error/:id",
+      (req, res, next) => {
+        req.user = { id: 1 };
+        next();
+      },
+      (req, res, next) => {
+        // Mock Collection.findByPk to throw an error
+        jest.spyOn(Collection, "findByPk").mockImplementationOnce(() => {
+          throw new Error("Database error");
+        });
+
+        // Call the middleware directly
+        return authorization.collectionAuthorization(req, res, next);
+      }
+    );
+
+    const response = await request(mockApp).get("/test-collection-error/1");
+
+    // Verify error response
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty("message", "Internal Server Error");
+  });
+
+  test("Should handle errors in userAuthorization middleware", async () => {
+    // Setup test route with error-throwing mock
+    mockApp.get(
+      "/test-user-error/:userId",
+      (req, res, next) => {
+        // Force an error by making the userId parameter non-numeric
+        req.params.userId = "not-a-number";
+        req.user = { id: 1 };
+        next();
+      },
+      (req, res, next) => {
+        // Call the middleware directly
+        return authorization.userAuthorization(req, res, next);
+      }
+    );
+
+    const response = await request(mockApp).get(
+      "/test-user-error/not-a-number"
+    );
+
+    // Verify error response
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty("message", "Internal Server Error");
+  });
+});

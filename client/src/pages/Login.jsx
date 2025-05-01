@@ -17,7 +17,7 @@ export default function Login() {
       // Request ke server dengan format yang benar
       const { data } = await axios({
         method: "POST",
-        url: "http://localhost:3000/google-login",
+        url: "https://ip-fikri-server.fikri.fun/google-login",
         data: {
           token: response.credential, // Pastikan nama parameter sesuai dengan yang diharapkan server
         },
@@ -58,10 +58,13 @@ export default function Login() {
 
     try {
       // Request ke server
-      const { data } = await axios.post("http://localhost:3000/login", {
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        "https://ip-fikri-server.fikri.fun/login",
+        {
+          email,
+          password,
+        }
+      );
 
       localStorage.setItem("access_token", data.access_token);
       navigate("/");

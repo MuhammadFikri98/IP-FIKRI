@@ -185,4 +185,138 @@ describe("Models Index - Branch Coverage Tests", () => {
     // Verify that console.warn was called (for non-function model)
     expect(console.warn).toHaveBeenCalled();
   });
+
+  test("should use development environment by default", () => {
+    // Set undefined environment
+    delete process.env.NODE_ENV;
+
+    // Mock fs.readdirSync to return empty list to simplify test
+    fs.readdirSync.mockReturnValue([]);
+
+    // Import our module under test
+    const Sequelize = require("sequelize");
+    const db = require("../../models/index");
+
+    // Verify Sequelize was initialized with development config
+    expect(Sequelize).toHaveBeenCalledWith(
+      "testdb",
+      "user",
+      "pass",
+      expect.objectContaining({ dialect: "postgres" })
+    );
+  });
+
+  test("should use environment variable when specified in config", () => {
+    // Set production environment and DATABASE_URL
+    process.env.NODE_ENV = "production";
+    process.env.DATABASE_URL = "postgres://user:pass@localhost:5432/prod_db";
+
+    // Mock fs.readdirSync to return empty list to simplify test
+    fs.readdirSync.mockReturnValue([]);
+
+    // Import our module under test
+    const Sequelize = require("sequelize");
+    const db = require("../../models/index");
+
+    // Verify Sequelize was initialized with environment variable
+    expect(Sequelize).toHaveBeenCalledWith(
+      "postgres://user:pass@localhost:5432/prod_db",
+      expect.objectContaining({ dialect: "postgres" })
+    );
+  });
+
+  test("should load valid model files", () => {
+    // Mock fs.readdirSync to return model files
+    fs.readdirSync.mockReturnValue([
+      "user.js",
+      "collection.js",
+      "index.js",
+      ".DS_Store",
+      "model.test.js",
+    ]);
+
+    // Mock require for model files
+    const mockUserModel = jest
+      .fn()
+      .mockReturnValue({ name: "User", associate: jest.fn() });
+    const mockCollectionModel = jest
+      .fn()
+      .mockReturnValue({ name: "Collection" });
+
+    // Setup dynamic mocking of require calls
+    jest.mock("../../models/user.js", () => mockUserModel, { virtual: true });
+    jest.mock("../../models/collection.js", () => mockCollectionModel, {
+      virtual: true,
+    });
+
+    // Import our module under test
+    const db = require("../../models/index");
+
+    // Verify models were loaded
+    expect(db.User).toBeDefined();
+    expect(db.Collection).toBeDefined();
+
+    // Verify associate was called for User model
+    expect(db.User.associate).toHaveBeenCalledWith(db);
+  });
+
+  test("should skip files that do not export a function", () => {
+    // Mock console.warn to verify warning is logged
+    const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
+
+    // Mock fs.readdirSync to return model files
+    fs.readdirSync.mockReturnValue(["validModel.js", "invalidModel.js"]);
+
+    // Mock require for model files
+    const mockValidModel = jest.fn().mockReturnValue({ name: "ValidModel" });
+    const mockInvalidModel = { name: "InvalidModel" }; // Not a function
+
+    // Setup dynamic mocking of require calls
+    jest.mock("../../models/validModel.js", () => mockValidModel, {
+      virtual: true,
+    });
+    jest.mock("../../models/invalidModel.js", () => mockInvalidModel, {
+      virtual: true,
+    });
+
+    // Import our module under test
+    const db = require("../../models/index");
+
+    // Verify only valid model was loaded
+    expect(db.ValidModel).toBeDefined();
+    expect(db.InvalidModel).toBeUndefined();
+
+    // Verify warning was logged for invalid model
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "Model file invalidModel.js does not export a function"
+      )
+    );
+
+    // Clean up
+    consoleSpy.mockRestore();
+  });
+
+  test("should not call associate if not defined", () => {
+    // Mock fs.readdirSync to return model files
+    fs.readdirSync.mockReturnValue(["modelWithoutAssociate.js"]);
+
+    // Mock require for model file
+    const mockModel = jest
+      .fn()
+      .mockReturnValue({ name: "ModelWithoutAssociate" });
+
+    // Setup dynamic mocking of require calls
+    jest.mock("../../models/modelWithoutAssociate.js", () => mockModel, {
+      virtual: true,
+    });
+
+    // Import our module under test
+    const db = require("../../models/index");
+
+    // Verify model was loaded
+    expect(db.ModelWithoutAssociate).toBeDefined();
+
+    // No error should be thrown since associate is not defined
+  });
 });
