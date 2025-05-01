@@ -125,4 +125,92 @@ describe("DataLoader Helper", () => {
       consoleSpy.mockRestore();
     });
   });
+
+  // Add these tests to improve coverage of loadCountryData and loadLanguageData methods
+
+  describe("loadCountryData", () => {
+    test("Should load full country data array correctly", () => {
+      // Mock successful file read with sample data
+      fs.readFileSync.mockReturnValue(
+        JSON.stringify([
+          { country: "United States", code: "us" },
+          { country: "Germany", code: "de" },
+          { country: "Japan", code: "jp" },
+        ])
+      );
+
+      const countryData = DataLoader.loadCountryData();
+
+      // Verify we got an array
+      expect(Array.isArray(countryData)).toBe(true);
+
+      // Verify the data structure
+      expect(countryData[0]).toHaveProperty("country");
+      expect(countryData[0]).toHaveProperty("code");
+
+      // Verify the mock was called
+      expect(fs.readFileSync).toHaveBeenCalledWith(
+        expect.stringContaining("country.json"),
+        "utf8"
+      );
+    });
+
+    test("Should return default country data on file error", () => {
+      // Mock file read error
+      fs.readFileSync.mockImplementation(() => {
+        throw new Error("File not found");
+      });
+
+      const countryData = DataLoader.loadCountryData();
+
+      // Should return default data
+      expect(Array.isArray(countryData)).toBe(true);
+      expect(countryData.length).toBeGreaterThan(0);
+      expect(countryData[0]).toHaveProperty("country");
+      expect(countryData[0]).toHaveProperty("code");
+    });
+  });
+
+  describe("loadLanguageData", () => {
+    test("Should load full language data array correctly", () => {
+      // Mock successful file read with sample data
+      fs.readFileSync.mockReturnValue(
+        JSON.stringify([
+          { language: "English", code: "en" },
+          { language: "French", code: "fr" },
+          { language: "Japanese", code: "ja" },
+        ])
+      );
+
+      const languageData = DataLoader.loadLanguageData();
+
+      // Verify we got an array
+      expect(Array.isArray(languageData)).toBe(true);
+
+      // Verify the data structure
+      expect(languageData[0]).toHaveProperty("language");
+      expect(languageData[0]).toHaveProperty("code");
+
+      // Verify the mock was called
+      expect(fs.readFileSync).toHaveBeenCalledWith(
+        expect.stringContaining("language.json"),
+        "utf8"
+      );
+    });
+
+    test("Should return default language data on file error", () => {
+      // Mock file read error
+      fs.readFileSync.mockImplementation(() => {
+        throw new Error("File not found");
+      });
+
+      const languageData = DataLoader.loadLanguageData();
+
+      // Should return default data
+      expect(Array.isArray(languageData)).toBe(true);
+      expect(languageData.length).toBeGreaterThan(0);
+      expect(languageData[0]).toHaveProperty("language");
+      expect(languageData[0]).toHaveProperty("code");
+    });
+  });
 });

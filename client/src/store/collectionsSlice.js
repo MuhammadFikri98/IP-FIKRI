@@ -14,7 +14,7 @@ export const fetchCollections = createAsyncThunk(
 
       const response = await axios.get(
         `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
+          import.meta.env.VITE_API_URL || "https://ip-fikri-server.fikri.fun"
         }/users/${userId}/collections`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -43,7 +43,7 @@ export const createCollection = createAsyncThunk(
 
       const response = await axios.post(
         `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
+          import.meta.env.VITE_API_URL || "https://ip-fikri-server.fikri.fun"
         }/collections`,
         collectionData,
         {
@@ -78,7 +78,7 @@ export const fetchCollectionById = createAsyncThunk(
 
       const response = await axios.get(
         `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
+          import.meta.env.VITE_API_URL || "https://ip-fikri-server.fikri.fun"
         }/collections/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -107,7 +107,7 @@ export const updateCollection = createAsyncThunk(
 
       const response = await axios.put(
         `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
+          import.meta.env.VITE_API_URL || "https://ip-fikri-server.fikri.fun"
         }/collections/${id}`,
         collectionData,
         {
@@ -142,7 +142,7 @@ export const deleteCollection = createAsyncThunk(
 
       await axios.delete(
         `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
+          import.meta.env.VITE_API_URL || "https://ip-fikri-server.fikri.fun"
         }/collections/${collectionId}`,
         {
           headers: { Authorization: `Bearer ${token}` },

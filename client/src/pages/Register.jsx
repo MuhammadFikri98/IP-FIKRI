@@ -13,7 +13,7 @@ export default function Register() {
 
     try {
       // Perbaiki URL dengan menambahkan http://
-      await axios.post("http://localhost:3000/register", {
+      await axios.post("https://ip-fikri-server.fikri.fun/register", {
         email,
         password,
       });

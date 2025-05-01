@@ -1,0 +1,1522 @@
+
+> server@1.0.0 test
+> npx jest --verbose --detectOpenHandles --runInBand --forceExit --coverage && node show-coverage.js --coverage
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":2,"userId":1,"country":"United States","language":"English","theme":"Technology","createdAt":"2025-05-01T17:00:52.454Z","updatedAt":"2025-05-01T17:00:52.454Z"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at log (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=e35545f0e1f249d1b83dd9e0d10ab16e&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at log (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 10 articles
+
+      at log (controllers/NewsController.js:77:17)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"model":"gemini-1.5-pro","location":"global"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"5s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.generateAIRecommendation (controllers/NewsController.js:307:28)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Function.generateAIRecommendation (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:307:28)
+        at getRecommendedNews (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:102:34) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Function.generateAIRecommendation (controllers/NewsController.js:307:28)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.log
+    Retrying with simpler prompt
+
+      at Function.log [as generateAIRecommendation] (controllers/NewsController.js:314:19)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"4s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.generateAIRecommendation (controllers/NewsController.js:318:30)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Function.generateAIRecommendation (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:318:30)
+        at getRecommendedNews (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:102:34) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Function.generateAIRecommendation (controllers/NewsController.js:318:30)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":2,"userId":1,"country":"United States","language":"English","theme":"Technology","createdAt":"2025-05-01T17:00:52.454Z","updatedAt":"2025-05-01T17:00:52.454Z"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at log (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=e35545f0e1f249d1b83dd9e0d10ab16e&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at log (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 10 articles
+
+      at log (controllers/NewsController.js:77:17)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"2s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.generateAIRecommendation (controllers/NewsController.js:307:28)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Function.generateAIRecommendation (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:307:28)
+        at getRecommendedNews (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:102:34) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Function.generateAIRecommendation (controllers/NewsController.js:307:28)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.log
+    Retrying with simpler prompt
+
+      at Function.log [as generateAIRecommendation] (controllers/NewsController.js:314:19)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"model":"gemini-1.5-pro","location":"global"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"1s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.generateAIRecommendation (controllers/NewsController.js:318:30)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Function.generateAIRecommendation (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:318:30)
+        at getRecommendedNews (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:102:34) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Function.generateAIRecommendation (controllers/NewsController.js:318:30)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":2,"userId":1,"country":"United States","language":"English","theme":"Technology","createdAt":"2025-05-01T17:00:52.454Z","updatedAt":"2025-05-01T17:00:52.454Z"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at log (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=e35545f0e1f249d1b83dd9e0d10ab16e&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at log (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 10 articles
+
+      at log (controllers/NewsController.js:77:17)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"0s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.generateAIRecommendation (controllers/NewsController.js:307:28)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Function.generateAIRecommendation (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:307:28)
+        at getRecommendedNews (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:102:34) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Function.generateAIRecommendation (controllers/NewsController.js:307:28)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.log
+    Retrying with simpler prompt
+
+      at Function.log [as generateAIRecommendation] (controllers/NewsController.js:314:19)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"0s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.generateAIRecommendation (controllers/NewsController.js:318:30)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Function.generateAIRecommendation (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:318:30)
+        at getRecommendedNews (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:102:34) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Function.generateAIRecommendation (controllers/NewsController.js:318:30)
+      at getRecommendedNews (controllers/NewsController.js:102:34)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 0
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.error
+    News recommendation error: {
+      name: 'BadRequest',
+      message: 'You need to create collections first to get personalized news recommendations'
+    }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at error (controllers/NewsController.js:143:15)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":7,"userId":1,"language":"English","theme":"Technology"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.error
+    News recommendation error: {
+      name: 'BadRequest',
+      message: 'Your collection is missing required information (country, language, or theme)'
+    }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at error (controllers/NewsController.js:143:15)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"59s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at generateContent (controllers/GeminiController.js:12:32)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\GeminiController.js:12:32) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at generateContent (controllers/GeminiController.js:12:32)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-1.5-pro"},"quotaValue":"50"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"58s"}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.summarize (helpers/gemini.js:100:12)
+      at summarizeNews (controllers/GeminiController.js:30:23)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Function.summarize (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:100:12)
+        at summarizeNews (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\GeminiController.js:30:23) {
+      status: 404,
+      statusText: 'Not Found',
+      errorDetails: undefined
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Function.summarize (helpers/gemini.js:100:12)
+      at summarizeNews (controllers/GeminiController.js:30:23)
+
+  console.error
+    Error in collection test cleanup: Error: ConnectionManager.getConnection was called after the connection manager was closed!
+        at ConnectionManager.getConnection (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\sequelize\src\dialects\abstract\connection-manager.js:113:13)
+        at C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\sequelize\src\sequelize.js:638:111
+        at C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\retry-as-promised\dist\index.js:65:25
+        at new Promise (<anonymous>)
+        at retryAsPromised (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\retry-as-promised\dist\index.js:54:12)
+        at Sequelize.query (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\sequelize\src\sequelize.js:631:12)
+        at PostgresQueryInterface.bulkDelete (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\sequelize\src\dialects\abstract\query-interface.js:992:33)
+        at Function.destroy (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\sequelize\src\model.js:3083:42)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\apis\collection.test.js:47:5)
+
+    [0m [90m 48 |[39m     [36mawait[39m [33mUser[39m[33m.[39mdestroy({ where[33m:[39m { id[33m:[39m userId } })[33m;[39m
+     [90m 49 |[39m   } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 50 |[39m     console[33m.[39merror([32m"Error in collection test cleanup:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 51 |[39m   }
+     [90m 52 |[39m })[33m;[39m
+     [90m 53 |[39m[0m
+
+      at Object.error (tests/apis/collection.test.js:50:13)
+
+  console.warn
+    Gemini API key is not configured
+
+    [0m [90m 10 |[39m
+     [90m 11 |[39m     [36mif[39m ([33m![39mapiKey) {
+    [31m[1m>[22m[39m[90m 12 |[39m       console[33m.[39mwarn([32m"Gemini API key is not configured"[39m)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 13 |[39m       [36mreturn[39m [32m"AI recommendations unavailable - API key not configured. Please contact the administrator."[39m[33m;[39m
+     [90m 14 |[39m     }
+     [90m 15 |[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:12:15)
+      at generateContent (tests/helpers/gemini-advanced.test.js:28:26)
+      at Object.toMatchObject (node_modules/expect/build/index.js:202:58)
+      at Object.toMatchObject (tests/helpers/gemini-advanced.test.js:29:16)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Object.<anonymous> (tests/helpers/gemini-advanced.test.js:49:20)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\gemini-advanced.test.js:49:20) {
+      status: 400,
+      statusText: 'Bad Request',
+      errorDetails: [
+        {
+          '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+          reason: 'API_KEY_INVALID',
+          domain: 'googleapis.com',
+          metadata: [Object]
+        },
+        {
+          '@type': 'type.googleapis.com/google.rpc.LocalizedMessage',
+          locale: 'en-US',
+          message: 'API key not valid. Please pass a valid API key.'
+        }
+      ]
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Object.<anonymous> (tests/helpers/gemini-advanced.test.js:49:20)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at tests/helpers/gemini-advanced.test.js:76:7
+      at Object.<anonymous> (tests/helpers/gemini-advanced.test.js:75:5)
+
+  console.error
+    Gemini API Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]
+        at handleResponseNotOk (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:434:11)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at makeRequest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:403:9)
+        at generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\@google\generative-ai\dist\index.js:867:22)
+        at Function.generateContent (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\gemini.js:78:32)
+        at C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\gemini-advanced.test.js:76:7
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\gemini-advanced.test.js:75:5) {
+      status: 400,
+      statusText: 'Bad Request',
+      errorDetails: [
+        {
+          '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+          reason: 'API_KEY_INVALID',
+          domain: 'googleapis.com',
+          metadata: [Object]
+        },
+        {
+          '@type': 'type.googleapis.com/google.rpc.LocalizedMessage',
+          locale: 'en-US',
+          message: 'API key not valid. Please pass a valid API key.'
+        }
+      ]
+    }
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at tests/helpers/gemini-advanced.test.js:76:7
+      at Object.<anonymous> (tests/helpers/gemini-advanced.test.js:75:5)
+
+  console.log
+    Retrying with simpler prompt
+
+      at Function.log [as generateAIRecommendation] (controllers/NewsController.js:314:19)
+
+  console.log
+    Retrying with simpler prompt
+
+      at Function.log [as generateAIRecommendation] (controllers/NewsController.js:314:19)
+
+  console.error
+    Error getting country name: Error: Test error
+        at Function.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\controllers\news-branch-coverage.test.js:734:15)
+        at C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:397:39
+        at Function.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:404:13)
+        at Function.mockConstructor (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:148:19)
+        at Function.loadCountryData (eval at _createMockFunction (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:566:31), <anonymous>:3:61)
+        at Function.loadCountryData [as getCountryName] (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:517:40)
+        at Object.getCountryName (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\controllers\news-branch-coverage.test.js:737:29)
+        at Promise.then.completed (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:316:40)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at _runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 519 |[39m       [36mreturn[39m foundCountry [33m?[39m foundCountry[33m.[39mcountry [33m:[39m [32m"United States"[39m[33m;[39m
+     [90m 520 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 521 |[39m       console[33m.[39merror([32m"Error getting country name:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 522 |[39m       [36mreturn[39m [32m"United States"[39m[33m;[39m
+     [90m 523 |[39m     }
+     [90m 524 |[39m   }[0m
+
+      at Function.error [as getCountryName] (controllers/NewsController.js:521:15)
+      at Object.getCountryName (tests/controllers/news-branch-coverage.test.js:737:29)
+
+  console.error
+    Error getting language name: Error: Test error
+        at Function.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\controllers\news-branch-coverage.test.js:743:15)
+        at C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:397:39
+        at Function.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:404:13)
+        at Function.mockConstructor (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:148:19)
+        at Function.loadLanguageData (eval at _createMockFunction (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:566:31), <anonymous>:3:62)
+        at Function.loadLanguageData [as getLanguageName] (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\controllers\NewsController.js:535:40)
+        at Object.getLanguageName (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\controllers\news-branch-coverage.test.js:746:29)
+        at Promise.then.completed (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:316:40)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at _runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 537 |[39m       [36mreturn[39m foundLanguage [33m?[39m foundLanguage[33m.[39mlanguage [33m:[39m [32m"English"[39m[33m;[39m
+     [90m 538 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 539 |[39m       console[33m.[39merror([32m"Error getting language name:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 540 |[39m       [36mreturn[39m [32m"English"[39m[33m;[39m
+     [90m 541 |[39m     }
+     [90m 542 |[39m   }[0m
+
+      at Function.error [as getLanguageName] (controllers/NewsController.js:539:15)
+      at Object.getLanguageName (tests/controllers/news-branch-coverage.test.js:746:29)
+
+  console.log
+    User ID: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":1,"userId":1,"country":"United States","language":"English","theme":"Technology"}
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=test-api-key&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:72:15)
+
+  console.error
+    WorldNews API Error: undefined
+
+    [0m [90m 117 |[39m         })[33m;[39m
+     [90m 118 |[39m       } [36mcatch[39m (apiError) {
+    [31m[1m>[22m[39m[90m 119 |[39m         console[33m.[39merror([32m"WorldNews API Error:"[39m[33m,[39m apiError[33m.[39mmessage)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 120 |[39m         [36mif[39m (apiError[33m.[39mresponse) {
+     [90m 121 |[39m           console[33m.[39merror([32m"API Error Status:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mstatus)[33m;[39m
+     [90m 122 |[39m           console[33m.[39merror([32m"API Error Data:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mdata)[33m;[39m[0m
+
+      at Function.error [as getRecommendedNews] (controllers/NewsController.js:119:17)
+      at Object.<anonymous> (tests/controllers/news-advanced.test.js:104:7)
+
+  console.error
+    API Error Status: 400
+
+    [0m [90m 119 |[39m         console[33m.[39merror([32m"WorldNews API Error:"[39m[33m,[39m apiError[33m.[39mmessage)[33m;[39m
+     [90m 120 |[39m         [36mif[39m (apiError[33m.[39mresponse) {
+    [31m[1m>[22m[39m[90m 121 |[39m           console[33m.[39merror([32m"API Error Status:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mstatus)[33m;[39m
+     [90m     |[39m                   [31m[1m^[22m[39m
+     [90m 122 |[39m           console[33m.[39merror([32m"API Error Data:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mdata)[33m;[39m
+     [90m 123 |[39m         }
+     [90m 124 |[39m[0m
+
+      at Function.error [as getRecommendedNews] (controllers/NewsController.js:121:19)
+      at Object.<anonymous> (tests/controllers/news-advanced.test.js:104:7)
+
+  console.error
+    API Error Data: { error: 'Server error' }
+
+    [0m [90m 120 |[39m         [36mif[39m (apiError[33m.[39mresponse) {
+     [90m 121 |[39m           console[33m.[39merror([32m"API Error Status:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mstatus)[33m;[39m
+    [31m[1m>[22m[39m[90m 122 |[39m           console[33m.[39merror([32m"API Error Data:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mdata)[33m;[39m
+     [90m     |[39m                   [31m[1m^[22m[39m
+     [90m 123 |[39m         }
+     [90m 124 |[39m
+     [90m 125 |[39m         [90m// Use mock data for API errors or payment required responses[39m[0m
+
+      at Function.error [as getRecommendedNews] (controllers/NewsController.js:122:19)
+      at Object.<anonymous> (tests/controllers/news-advanced.test.js:104:7)
+
+  console.error
+    News recommendation error: { name: 'BadRequest', message: 'Error fetching news: Unknown error' }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at Function.error [as getRecommendedNews] (controllers/NewsController.js:143:15)
+      at Object.<anonymous> (tests/controllers/news-advanced.test.js:104:7)
+
+  console.log
+    User ID: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":1,"userId":1,"country":"United States","language":"English","theme":"Technology"}
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=test-api-key&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:72:15)
+
+  console.error
+    WorldNews API Error: Network error
+
+    [0m [90m 117 |[39m         })[33m;[39m
+     [90m 118 |[39m       } [36mcatch[39m (apiError) {
+    [31m[1m>[22m[39m[90m 119 |[39m         console[33m.[39merror([32m"WorldNews API Error:"[39m[33m,[39m apiError[33m.[39mmessage)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 120 |[39m         [36mif[39m (apiError[33m.[39mresponse) {
+     [90m 121 |[39m           console[33m.[39merror([32m"API Error Status:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mstatus)[33m;[39m
+     [90m 122 |[39m           console[33m.[39merror([32m"API Error Data:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mdata)[33m;[39m[0m
+
+      at Function.error [as getRecommendedNews] (controllers/NewsController.js:119:17)
+      at Object.<anonymous> (tests/controllers/news-advanced.test.js:132:7)
+
+  console.error
+    News recommendation error: { name: 'BadRequest', message: 'Error fetching news: Network error' }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at Function.error [as getRecommendedNews] (controllers/NewsController.js:143:15)
+      at Object.<anonymous> (tests/controllers/news-advanced.test.js:132:7)
+
+  console.log
+    User ID: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":1,"userId":1,"country":"United States","language":"English","theme":"Technology"}
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:49:15)
+
+  console.log
+    API key not configured, using mock data
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:57:17)
+
+  console.log
+    User ID: 15
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":9,"userId":15,"country":"United States","language":"English","theme":"Technology"}
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=test-api-key&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 0 articles
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:77:17)
+
+  console.log
+    User ID: 15
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":9,"userId":15,"country":"United States","language":"English","theme":"Technology"}
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=test-api-key&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 0 articles
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:77:17)
+
+  console.log
+    User ID: 15
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":9,"userId":15,"country":"United States","language":"English","theme":"Technology"}
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=test-api-key&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 2 articles
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:77:17)
+
+  console.error
+    Error generating AI recommendation: Error: AI API error
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\controllers\news.test.js:123:52)
+        at Promise.then.completed (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:316:40)
+        at runNextTicks (node:internal/process/task_queues:65:5)
+        at processImmediate (node:internal/timers:459:9)
+        at _runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 335 |[39m       [36mreturn[39m aiRecommendation[33m;[39m
+     [90m 336 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 337 |[39m       console[33m.[39merror([32m"Error generating AI recommendation:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 338 |[39m       [90m// Fall back to mock recommendation[39m
+     [90m 339 |[39m       [36mreturn[39m [33mNewsController[39m[33m.[39mgenerateMockRecommendation(
+     [90m 340 |[39m         countryName[33m,[39m[0m
+
+      at Function.error [as generateAIRecommendation] (controllers/NewsController.js:337:15)
+      at Function.getRecommendedNews (controllers/NewsController.js:102:34)
+      at Object.<anonymous> (tests/controllers/news.test.js:126:5)
+
+  console.log
+    User ID: 15
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":2,"userId":15,"language":"English","theme":"Technology"}
+
+      at Function.log [as getRecommendedNews] (controllers/NewsController.js:26:15)
+
+  console.error
+    News recommendation error: {
+      name: 'BadRequest',
+      message: 'Your collection is missing required information (country, language, or theme)'
+    }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at Function.error [as getRecommendedNews] (controllers/NewsController.js:143:15)
+      at Object.<anonymous> (tests/controllers/news.test.js:151:5)
+
+  console.warn
+    Gemini API key is not configured
+
+    [0m [90m 10 |[39m
+     [90m 11 |[39m     [36mif[39m ([33m![39mapiKey) {
+    [31m[1m>[22m[39m[90m 12 |[39m       console[33m.[39mwarn([32m"Gemini API key is not configured"[39m)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 13 |[39m       [36mreturn[39m [32m"AI recommendations unavailable - API key not configured. Please contact the administrator."[39m[33m;[39m
+     [90m 14 |[39m     }
+     [90m 15 |[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:12:15)
+      at Object.generateContent (tests/helpers/gemini-complete-coverage.test.js:101:41)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: API Error
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Object.<anonymous> (tests/helpers/gemini-complete-coverage.test.js:117:22)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: Cannot read properties of undefined (reading 'response')
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Object.<anonymous> (tests/helpers/gemini-complete-coverage.test.js:133:27)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: Cannot read properties of undefined (reading 'response')
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Object.<anonymous> (tests/helpers/gemini-complete-coverage.test.js:136:26)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: Summarization Error
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.summarize (helpers/gemini.js:100:12)
+      at Object.<anonymous> (tests/helpers/gemini-complete-coverage.test.js:190:22)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: Cannot read properties of undefined (reading 'response')
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.summarize (helpers/gemini.js:100:12)
+      at Object.<anonymous> (tests/helpers/gemini-complete-coverage.test.js:204:27)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: Cannot read properties of undefined (reading 'response')
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Function.summarize (helpers/gemini.js:100:12)
+      at Object.<anonymous> (tests/helpers/gemini-complete-coverage.test.js:207:26)
+
+  console.warn
+    Error with gemini-1.5-pro, falling back to gemini-pro: response.text is not a function
+
+    [0m [90m 64 |[39m         [36mreturn[39m response[33m.[39mtext()[33m;[39m
+     [90m 65 |[39m       } [36mcatch[39m (specificModelError) {
+    [31m[1m>[22m[39m[90m 66 |[39m         console[33m.[39mwarn(
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 67 |[39m           [32m"Error with gemini-1.5-pro, falling back to gemini-pro:"[39m[33m,[39m
+     [90m 68 |[39m           specificModelError[33m.[39mmessage
+     [90m 69 |[39m         )[33m;[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:66:17)
+      at Object.<anonymous> (tests/helpers/gemini-complete-coverage.test.js:252:22)
+
+  console.error
+    Error verifying Google token: TypeError: Cannot read properties of undefined (reading 'getPayload')
+        at getPayload (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\googleOauth.js:14:28)
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\googleOauth.test.js:43:20)
+
+    [0m [90m 20 |[39m     }[33m;[39m
+     [90m 21 |[39m   } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 22 |[39m     console[33m.[39merror([32m"Error verifying Google token:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 23 |[39m     [36mthrow[39m { name[33m:[39m [32m"Unauthorized"[39m[33m,[39m message[33m:[39m [32m"Invalid Google token"[39m }[33m;[39m
+     [90m 24 |[39m   }
+     [90m 25 |[39m }[0m
+
+      at error (helpers/googleOauth.js:22:13)
+      at Object.<anonymous> (tests/helpers/googleOauth.test.js:43:20)
+
+  console.error
+    Error verifying Google token: TypeError: Cannot read properties of undefined (reading 'getPayload')
+        at getPayload (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\googleOauth.js:14:28)
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\googleOauth.test.js:70:5)
+
+    [0m [90m 20 |[39m     }[33m;[39m
+     [90m 21 |[39m   } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 22 |[39m     console[33m.[39merror([32m"Error verifying Google token:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 23 |[39m     [36mthrow[39m { name[33m:[39m [32m"Unauthorized"[39m[33m,[39m message[33m:[39m [32m"Invalid Google token"[39m }[33m;[39m
+     [90m 24 |[39m   }
+     [90m 25 |[39m }[0m
+
+      at error (helpers/googleOauth.js:22:13)
+      at Object.<anonymous> (tests/helpers/googleOauth.test.js:70:5)
+
+  console.error
+    Error verifying Google token: TypeError: Cannot read properties of undefined (reading 'getPayload')
+        at getPayload (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\googleOauth.js:14:28)
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\googleOauth.test.js:82:7)
+
+    [0m [90m 20 |[39m     }[33m;[39m
+     [90m 21 |[39m   } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 22 |[39m     console[33m.[39merror([32m"Error verifying Google token:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 23 |[39m     [36mthrow[39m { name[33m:[39m [32m"Unauthorized"[39m[33m,[39m message[33m:[39m [32m"Invalid Google token"[39m }[33m;[39m
+     [90m 24 |[39m   }
+     [90m 25 |[39m }[0m
+
+      at error (helpers/googleOauth.js:22:13)
+      at Object.<anonymous> (tests/helpers/googleOauth.test.js:82:7)
+
+  console.warn
+    Gemini API key is not configured
+
+    [0m [90m 10 |[39m
+     [90m 11 |[39m     [36mif[39m ([33m![39mapiKey) {
+    [31m[1m>[22m[39m[90m 12 |[39m       console[33m.[39mwarn([32m"Gemini API key is not configured"[39m)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 13 |[39m       [36mreturn[39m [32m"AI recommendations unavailable - API key not configured. Please contact the administrator."[39m[33m;[39m
+     [90m 14 |[39m     }
+     [90m 15 |[39m[0m
+
+      at Function.warn [as generateContent] (helpers/gemini.js:12:15)
+      at Object.generateContent (tests/helpers/gemini.test.js:29:20)
+
+  console.error
+    Gemini API Error: Error: API quota exceeded
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\gemini.test.js:124:23)
+        at Promise.then.completed (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 83 |[39m       console[33m.[39merror([32m"Gemini API Error:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 84 |[39m       [90m// Return a user-friendly message instead of throwing[39m
+     [90m 85 |[39m       [36mreturn[39m [32m"Unable to generate AI recommendation at this time. Please try again later."[39m[33m;[39m
+     [90m 86 |[39m     }[0m
+
+      at Function.error [as generateContent] (helpers/gemini.js:83:15)
+      at Object.generateContent (tests/helpers/gemini.test.js:130:20)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":7,"userId":1,"country":"United States","language":"English","theme":"Technology","createdAt":"2025-05-01T17:01:00.323Z","updatedAt":"2025-05-01T17:01:00.323Z"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at log (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=e35545f0e1f249d1b83dd9e0d10ab16e&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at log (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 1 articles
+
+      at log (controllers/NewsController.js:77:17)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":7,"userId":1,"country":"United States","language":"English","theme":"Technology","createdAt":"2025-05-01T17:01:00.323Z","updatedAt":"2025-05-01T17:01:00.323Z"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at log (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=e35545f0e1f249d1b83dd9e0d10ab16e&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at log (controllers/NewsController.js:72:15)
+
+  console.log
+    API Response: 200, found 0 articles
+
+      at log (controllers/NewsController.js:77:17)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":7,"userId":1,"country":"United States","language":"English","theme":"Technology","createdAt":"2025-05-01T17:01:00.323Z","updatedAt":"2025-05-01T17:01:00.323Z"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.log
+    Fetching Technology news from United States in English
+
+      at log (controllers/NewsController.js:49:15)
+
+  console.log
+    API URL: https://api.worldnewsapi.com/search-news?api-key=e35545f0e1f249d1b83dd9e0d10ab16e&language=en&source-countries=us&number=10&sort=publish-time&sort-direction=desc&text=Technology&earliest-publish-date=2025-04-28
+
+      at log (controllers/NewsController.js:72:15)
+
+  console.error
+    WorldNews API Error: API Error
+
+    [0m [90m 117 |[39m         })[33m;[39m
+     [90m 118 |[39m       } [36mcatch[39m (apiError) {
+    [31m[1m>[22m[39m[90m 119 |[39m         console[33m.[39merror([32m"WorldNews API Error:"[39m[33m,[39m apiError[33m.[39mmessage)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 120 |[39m         [36mif[39m (apiError[33m.[39mresponse) {
+     [90m 121 |[39m           console[33m.[39merror([32m"API Error Status:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mstatus)[33m;[39m
+     [90m 122 |[39m           console[33m.[39merror([32m"API Error Data:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mdata)[33m;[39m[0m
+
+      at error (controllers/NewsController.js:119:17)
+
+  console.error
+    API Error Status: 500
+
+    [0m [90m 119 |[39m         console[33m.[39merror([32m"WorldNews API Error:"[39m[33m,[39m apiError[33m.[39mmessage)[33m;[39m
+     [90m 120 |[39m         [36mif[39m (apiError[33m.[39mresponse) {
+    [31m[1m>[22m[39m[90m 121 |[39m           console[33m.[39merror([32m"API Error Status:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mstatus)[33m;[39m
+     [90m     |[39m                   [31m[1m^[22m[39m
+     [90m 122 |[39m           console[33m.[39merror([32m"API Error Data:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mdata)[33m;[39m
+     [90m 123 |[39m         }
+     [90m 124 |[39m[0m
+
+      at error (controllers/NewsController.js:121:19)
+
+  console.error
+    API Error Data: { error: 'Server error' }
+
+    [0m [90m 120 |[39m         [36mif[39m (apiError[33m.[39mresponse) {
+     [90m 121 |[39m           console[33m.[39merror([32m"API Error Status:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mstatus)[33m;[39m
+    [31m[1m>[22m[39m[90m 122 |[39m           console[33m.[39merror([32m"API Error Data:"[39m[33m,[39m apiError[33m.[39mresponse[33m.[39mdata)[33m;[39m
+     [90m     |[39m                   [31m[1m^[22m[39m
+     [90m 123 |[39m         }
+     [90m 124 |[39m
+     [90m 125 |[39m         [90m// Use mock data for API errors or payment required responses[39m[0m
+
+      at error (controllers/NewsController.js:122:19)
+
+  console.error
+    News recommendation error: { name: 'BadRequest', message: 'Error fetching news: API Error' }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at error (controllers/NewsController.js:143:15)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 0
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.error
+    News recommendation error: {
+      name: 'BadRequest',
+      message: 'You need to create collections first to get personalized news recommendations'
+    }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at error (controllers/NewsController.js:143:15)
+
+  console.log
+    User ID: 1
+
+      at log (controllers/NewsController.js:10:15)
+
+  console.log
+    Collections found: 1
+
+      at log (controllers/NewsController.js:14:15)
+
+  console.log
+    Latest collection: {"id":14,"userId":1,"language":"English","theme":"Technology"}
+
+      at log (controllers/NewsController.js:26:15)
+
+  console.error
+    News recommendation error: {
+      name: 'BadRequest',
+      message: 'Your collection is missing required information (country, language, or theme)'
+    }
+
+    [0m [90m 141 |[39m       }
+     [90m 142 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 143 |[39m       console[33m.[39merror([32m"News recommendation error:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 144 |[39m       next(error)[33m;[39m
+     [90m 145 |[39m     }
+     [90m 146 |[39m   }[0m
+
+      at error (controllers/NewsController.js:143:15)
+
+  console.error
+    Error loading country data: Error: File not found
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\dataLoader.test.js:161:15)
+        at C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:397:39
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:404:13)
+        at Object.mockConstructor (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:148:19)
+        at Object.readFileSync (eval at _createMockFunction (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:566:31), <anonymous>:3:58)
+        at Function.readFileSync [as loadCountryData] (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\dataLoader.js:90:12)
+        at Object.loadCountryData (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\dataLoader.test.js:164:38)
+        at Promise.then.completed (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 94 |[39m       )[33m;[39m
+     [90m 95 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 96 |[39m       console[33m.[39merror([32m"Error loading country data:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 97 |[39m       [90m// Return default data if file can't be loaded[39m
+     [90m 98 |[39m       [36mreturn[39m [
+     [90m 99 |[39m         { country[33m:[39m [32m"United States"[39m[33m,[39m code[33m:[39m [32m"us"[39m }[33m,[39m[0m
+
+      at Function.error [as loadCountryData] (helpers/dataLoader.js:96:15)
+      at Object.loadCountryData (tests/helpers/dataLoader.test.js:164:38)
+
+  console.error
+    Error loading language data: Error: File not found
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\dataLoader.test.js:204:15)
+        at C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:397:39
+        at Object.<anonymous> (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:404:13)
+        at Object.mockConstructor (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:148:19)
+        at Object.readFileSync (eval at _createMockFunction (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-mock\build\index.js:566:31), <anonymous>:3:58)
+        at Function.readFileSync [as loadLanguageData] (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\helpers\dataLoader.js:115:12)
+        at Object.loadLanguageData (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\tests\helpers\dataLoader.test.js:207:39)
+        at Promise.then.completed (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:316:40)
+        at _runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\Asus\Desktop\HCK82\FASE 2\W3\IP-FIKRI\server\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 124 |[39m       )[33m;[39m
+     [90m 125 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 126 |[39m       console[33m.[39merror([32m"Error loading language data:"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 127 |[39m       [90m// Return default data if file can't be loaded[39m
+     [90m 128 |[39m       [36mreturn[39m [
+     [90m 129 |[39m         { language[33m:[39m [32m"English"[39m[33m,[39m code[33m:[39m [32m"en"[39m }[33m,[39m[0m
+
+      at Function.error [as loadLanguageData] (helpers/dataLoader.js:126:15)
+      at Object.loadLanguageData (tests/helpers/dataLoader.test.js:207:39)
+
+--------------------------------------|---------|----------|---------|---------|-------------------
+File                                  | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------------------------------|---------|----------|---------|---------|-------------------
+All files                             |   89.81 |    85.34 |    88.4 |   89.59 |                   
+ server                               |   59.42 |    16.66 |   66.66 |   59.42 |                   
+  app.js                              |     100 |      100 |     100 |     100 |                   
+  show-coverage.js                    |   24.32 |     6.25 |      50 |   24.32 | 17-32,46-80       
+ server/controllers                   |    98.3 |    90.47 |     100 |   98.23 |                   
+  AuthController.js                   |     100 |    91.66 |     100 |     100 | 65                
+  CollectionController.js             |   95.83 |    93.33 |     100 |   95.83 | 31,59             
+  GeminiController.js                 |     100 |      100 |     100 |     100 |                   
+  NewsController.js                   |   98.55 |    89.34 |     100 |   98.43 | 127-128           
+ server/helpers                       |   98.64 |      100 |     100 |   98.64 |                   
+  bcrypt.js                           |     100 |      100 |     100 |     100 |                   
+  dataLoader.js                       |     100 |      100 |     100 |     100 |                   
+  gemini.js                           |     100 |      100 |     100 |     100 |                   
+  googleOauth.js                      |   88.88 |      100 |     100 |   88.88 | 16                
+  jwt.js                              |     100 |      100 |     100 |     100 |                   
+ server/middlewares                   |   98.03 |      100 |     100 |   98.03 |                   
+  authentication.js                   |     100 |      100 |     100 |     100 |                   
+  authorization.js                    |   94.44 |      100 |     100 |   94.44 | 46                
+  errorHandler.js                     |     100 |      100 |     100 |     100 |                   
+ server/migrations                    |       0 |      100 |       0 |       0 |                   
+  20250428133750-create-user.js       |       0 |      100 |       0 |       0 | 3-32              
+  20250429105454-create-collection.js |       0 |      100 |       0 |       0 | 3-45              
+ server/models                        |   97.29 |       75 |     100 |   97.29 |                   
+  collection.js                       |     100 |      100 |     100 |     100 |                   
+  index.js                            |   95.83 |       75 |     100 |   95.83 | 40                
+  user.js                             |     100 |      100 |     100 |     100 |                   
+ server/seeders                       |       0 |      100 |       0 |       0 |                   
+  20250428143149-seed-users.js        |       0 |      100 |       0 |       0 | 2-32              
+--------------------------------------|---------|----------|---------|---------|-------------------
