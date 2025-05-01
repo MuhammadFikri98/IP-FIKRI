@@ -1,0 +1,141 @@
+/* LoadingAnimation.css */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 200px;
+  padding: 2rem 0;
+}
+
+.news-loading-animation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: rgba(248, 249, 250, 0.7);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(5px);
+  width: 100%;
+  max-width: 400px;
+}
+
+.circle-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  margin: 0 8px;
+  border-radius: 50%;
+  transform-origin: center center;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.circle-1 {
+  background-color: #1a3a6c;
+  animation-name: bounce-delay;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  background-color: #2a5298;
+  animation-name: bounce-delay;
+  animation-delay: 0.2s;
+}
+
+.circle-3 {
+  background-color: #4c6eaf;
+  animation-name: bounce-delay;
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce-delay {
+  0%,
+  70%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+
+  35% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.news-loading-text {
+  margin-top: 1rem;
+}
+
+.news-loading-text h5 {
+  margin-bottom: 0.5rem;
+  color: #1a3a6c;
+  font-weight: 600;
+  animation: fadeIn 2s ease-in-out infinite alternate;
+}
+
+.news-loading-text p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* News card loading effect */
+.news-cards-loading {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.news-card-skeleton {
+  height: 300px;
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(243, 243, 243, 0.5) 25%,
+    rgba(252, 252, 252, 0.8) 50%,
+    rgba(243, 243, 243, 0.5) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}

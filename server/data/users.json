@@ -1,18 +1,11 @@
 [
   {
-    "id": 1,
     "email": "testAdmin@mail.com",
-    "password": "12345",
-    "role": "Admin",
-    "phoneNumber": "081234567890",
-    "address": "Jl. Merdeka No. 10, Jakarta"
+    "password": "12345"
   },
   {
-    "id": 2,
-    "email": "testStaff@mail.com",
-    "password": "12345",
-    "role": "Staff",
-    "phoneNumber": "082345678901",
-    "address": "Jl. Sudirman No. 22, Bandung"
+    "email": "testUser@mail.com",
+    "password": "12345"
   }
 ]
+
