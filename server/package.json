@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest --verbose --detectOpenHandles --runInBand --forceExit --coverage",
-    "coverage": "npx jest --coverage --coverageReporters=text-summary --silent"
+    "test": "npx jest --config jest.config.js",
+    "test:full": "npx jest --verbose --detectOpenHandles --runInBand --forceExit --coverage",
+    "coverage": "npx jest --coverage --coverageReporters=text",
+    "test:summary": "npx jest --coverage --coverageReporters=text-summary",
+    "test:table": "npx jest --coverage --coverageReporters=text-summary --silent"
   },
   "keywords": [],
   "author": "",

@@ -2,7 +2,7 @@ module.exports = {
   // Indicates whether each individual test should be reported during the run
   verbose: true,
 
-  // Automatically clear mock calls, instances, contexts and results before every test
+  // Automatically clear mock calls and instances between every test
   clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
@@ -11,39 +11,39 @@ module.exports = {
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
 
-  // Coverage reporters to use
-  // 'text' reporter will show the detailed coverage table
-  // We'll use it with the --silent flag to suppress other outputs
-  coverageReporters: ["text", "lcov", "clover", "json"],
+  // Gunakan text reporter untuk menampilkan hasil coverage di terminal dengan jelas
+  coverageReporters: ["text", "lcov"],
 
-  // Files to include in coverage calculation
+  // File yang akan dihitung dalam perhitungan coverage
   collectCoverageFrom: [
     "**/*.js",
     "!**/node_modules/**",
     "!**/coverage/**",
+    "!**/jest.config.js",
+    "!**/bin/**",
+    "!**/migrations/**",
+    "!**/seeders/**",
     "!**/tests/**",
-    "!jest.config.js",
+    "!**/test-output.txt",
+    "!**/show-coverage.js",
   ],
 
-  // Show coverage summary after all tests have run
+  // Target coverage minimum 90%
   coverageThreshold: {
     global: {
-      statements: 0,
-      branches: 0,
-      functions: 0,
-      lines: 0,
+      branches: 90,
+      functions: 90,
+      lines: 90,
+      statements: 90,
     },
   },
 
-  // Make test output less noisy
-  reporters: ["default"],
-
-  // Detect open handles (like database connections) that weren't closed
+  // Deteksi open handles untuk menghindari memory leaks
   detectOpenHandles: true,
 
-  // Run tests in a single process rather than in parallel
+  // Run in band agar test berjalan secara sequential, tidak paralel
   runInBand: true,
 
-  // Force Jest to exit after all tests have completed
+  // Force exit untuk menghindari test yang hanging
   forceExit: true,
 };

@@ -87,6 +87,24 @@ describe("CollectionController - Additional Branch Tests", () => {
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
     });
+
+    // New tests for findAll validation branches
+    test("should handle invalid userId format", async () => {
+      const response = await request(app)
+        .get("/users/invalid/collections")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "Invalid user ID format");
+    });
+
+    test("should handle missing userId", async () => {
+      const response = await request(app)
+        .get("/users//collections")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(404); // This is a route not found error
+    });
   });
 
   describe("POST /collections", () => {
@@ -104,6 +122,36 @@ describe("CollectionController - Additional Branch Tests", () => {
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty("id");
+    });
+
+    // New test for create validation branch
+    test("should handle empty request body", async () => {
+      const response = await request(app)
+        .post("/collections")
+        .set("Authorization", `Bearer ${token}`)
+        .send({});
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Required fields are missing"
+      );
+    });
+
+    test("should handle server error during creation", async () => {
+      // Mock a database error
+      Collection.create.mockRejectedValueOnce(new Error("Database error"));
+
+      const response = await request(app)
+        .post("/collections")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          country: "Germany",
+          language: "German",
+          theme: "Science",
+        });
+
+      expect(response.status).toBe(500);
     });
   });
 
@@ -126,6 +174,67 @@ describe("CollectionController - Additional Branch Tests", () => {
         "Collection updated successfully"
       );
     });
+
+    // New tests for update validation branches
+    test("should handle invalid collection ID format", async () => {
+      const response = await request(app)
+        .put("/collections/invalid")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ theme: "Science" });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Invalid collection ID format"
+      );
+    });
+
+    test("should handle empty request body", async () => {
+      const response = await request(app)
+        .put(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({});
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "No fields provided for update"
+      );
+    });
+
+    test("should handle collection not found", async () => {
+      // Mock collection not found
+      Collection.findByPk.mockResolvedValueOnce(null);
+
+      const response = await request(app)
+        .put(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ theme: "Science" });
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty(
+        "message",
+        `Collection with id ${collectionId} is not found`
+      );
+    });
+
+    test("should handle database error during update", async () => {
+      // Mock a collection that throws an error on update
+      const errorCollection = {
+        id: collectionId,
+        userId: userId,
+        update: jest.fn().mockRejectedValueOnce(new Error("Database error")),
+      };
+
+      Collection.findByPk.mockResolvedValueOnce(errorCollection);
+
+      const response = await request(app)
+        .put(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ theme: "Error" });
+
+      expect(response.status).toBe(500);
+    });
   });
 
   describe("DELETE /collections/:id", () => {
@@ -139,6 +248,100 @@ describe("CollectionController - Additional Branch Tests", () => {
         "message",
         "Collection deleted successfully"
       );
+    });
+
+    // New tests for delete validation branches
+    test("should handle invalid collection ID format", async () => {
+      const response = await request(app)
+        .delete("/collections/invalid")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Invalid collection ID format"
+      );
+    });
+
+    test("should handle collection not found", async () => {
+      // Mock collection not found
+      Collection.findByPk.mockResolvedValueOnce(null);
+
+      const response = await request(app)
+        .delete(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty(
+        "message",
+        `Collection with id ${collectionId} is not found`
+      );
+    });
+
+    test("should handle database error during deletion", async () => {
+      // Mock a collection that throws an error on destroy
+      const errorCollection = {
+        id: collectionId,
+        userId: userId,
+        destroy: jest.fn().mockRejectedValueOnce(new Error("Database error")),
+      };
+
+      Collection.findByPk.mockResolvedValueOnce(errorCollection);
+
+      const response = await request(app)
+        .delete(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(500);
+    });
+  });
+
+  describe("GET /collections/:id - findOne", () => {
+    test("should find collection by ID", async () => {
+      const response = await request(app)
+        .get(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("id", collectionId);
+    });
+
+    test("should handle invalid collection ID format", async () => {
+      const response = await request(app)
+        .get("/collections/invalid")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Invalid collection ID format"
+      );
+    });
+
+    test("should handle collection not found", async () => {
+      // Mock collection not found
+      Collection.findByPk.mockResolvedValueOnce(null);
+
+      const response = await request(app)
+        .get(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty(
+        "message",
+        `Collection with id ${collectionId} is not found`
+      );
+    });
+
+    test("should handle database error", async () => {
+      // Mock database error
+      Collection.findByPk.mockRejectedValueOnce(new Error("Database error"));
+
+      const response = await request(app)
+        .get(`/collections/${collectionId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(500);
     });
   });
 });
