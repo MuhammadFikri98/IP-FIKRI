@@ -25,6 +25,7 @@ export default function Home() {
   const [collections, setCollections] = useState([]);
   // News recommendations state
   const [newsRecommendations, setNewsRecommendations] = useState([]);
+  const [aiRecommendation, setAiRecommendation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -177,7 +178,7 @@ export default function Home() {
       // Check if user has collections first
       if (collections.length === 0) {
         setError(
-          "You need to create a collection first to get personalized news recommendations"
+          "Anda perlu membuat koleksi terlebih dahulu untuk mendapatkan rekomendasi berita personal"
         );
         setIsLoading(false);
         return;
@@ -193,22 +194,38 @@ export default function Home() {
         }
       );
 
-      console.log("Recommendations response:", response.data);
+      // Log response data for debugging
+      console.log("News API response:", response.data);
 
       // Handle the response structure correctly
       if (response.data.news) {
         setNewsRecommendations(response.data.news);
+
+        // Set the AI recommendation if available
+        if (response.data.aiRecommendation) {
+          setAiRecommendation(response.data.aiRecommendation);
+        } else {
+          setAiRecommendation("");
+        }
+
+        // If there's a user preferences object, update UI to show current preferences
+        if (response.data.userPreferences) {
+          const prefs = response.data.userPreferences;
+          // Display current preferences in a user-friendly format
+          console.log("Current preferences:", prefs);
+
+          // If preferences message is provided, show it
+          if (response.data.message) {
+            setError(response.data.message);
+          }
+        }
       } else {
         setNewsRecommendations([]);
-      }
-
-      // If empty news but we have a message
-      if (
-        response.data.news &&
-        response.data.news.length === 0 &&
-        response.data.message
-      ) {
-        setError(response.data.message);
+        setAiRecommendation("");
+        // Show message if provided
+        if (response.data.message) {
+          setError(response.data.message);
+        }
       }
     } catch (error) {
       console.error(
@@ -216,87 +233,20 @@ export default function Home() {
         error.response?.data || error
       );
 
-      // Check for specific error messages from the API
-      if (error.response?.status === 402) {
-        // Use mock data for demonstration if the API requires payment
-        console.log("Using demo data due to API payment requirement");
-        const mockData = generateMockNewsData();
-        setNewsRecommendations(mockData);
-        setError(
-          "Note: Using demo data. The real news API requires payment or has exceeded free usage limits."
-        );
-      } else if (error.response?.data?.message) {
+      if (error.response?.data?.message) {
         setError(error.response.data.message);
       } else if (error.response?.status === 400) {
         setError(
-          "You need to create a collection with country, language, and theme information first"
+          "Anda perlu membuat koleksi dengan informasi negara dan bahasa terlebih dahulu"
         );
       } else {
         setError(
-          "Failed to fetch news recommendations. Please try again later."
+          "Gagal mengambil rekomendasi berita. Silakan coba lagi nanti."
         );
       }
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Function to generate mock news data for demo purposes
-  const generateMockNewsData = () => {
-    // Get preferences from the most recent collection
-    const latestCollection = collections[collections.length - 1];
-    const country = latestCollection?.country || "Unknown";
-    const language = latestCollection?.language || "Unknown";
-    const theme = latestCollection?.theme || "Unknown";
-
-    // Find readable names for codes
-    const countryName =
-      countries.find((c) => c.code === country)?.country || country;
-    const languageName =
-      languages.find((l) => l.code === language)?.language || language;
-
-    return [
-      {
-        title: `${theme} News: Major Developments in ${countryName}`,
-        description: `Recent developments in ${theme} are making headlines across ${countryName}. This article covers the most important updates in ${languageName}.`,
-        url: "#",
-        urlToImage: "https://via.placeholder.com/600x400?text=News+Image",
-        publishedAt: new Date().toISOString(),
-        source: { name: "NEWS GenAI Demo" },
-        country: country,
-        language: language,
-      },
-      {
-        title: `${countryName}'s Approach to ${theme} Creates Global Interest`,
-        description: `Experts worldwide are discussing ${countryName}'s innovative approach to ${theme}. Read the analysis and commentary from leading specialists.`,
-        url: "#",
-        urlToImage: "https://via.placeholder.com/600x400?text=Analysis+Image",
-        publishedAt: new Date(Date.now() - 86400000).toISOString(), // yesterday
-        source: { name: "Global Analysis" },
-        country: country,
-        language: language,
-      },
-      {
-        title: `Interview: Leading Expert Discusses ${theme} Trends`,
-        description: `An exclusive interview with a leading expert in ${theme} discussing current trends and future predictions, particularly relevant to ${countryName}.`,
-        url: "#",
-        urlToImage: "https://via.placeholder.com/600x400?text=Interview+Image",
-        publishedAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-        source: { name: "Expert Insights" },
-        country: country,
-        language: language,
-      },
-      {
-        title: `Historical Context: ${theme} in ${countryName} Over the Decades`,
-        description: `A look back at how ${theme} has evolved in ${countryName} over recent decades and what these changes mean for today's society.`,
-        url: "#",
-        urlToImage: "https://via.placeholder.com/600x400?text=History+Image",
-        publishedAt: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
-        source: { name: "Historical Review" },
-        country: country,
-        language: language,
-      },
-    ];
   };
 
   // Debug function
@@ -1038,89 +988,196 @@ export default function Home() {
                             </div>
                           </div>
                         ) : (
-                          <div className="row">
-                            {newsRecommendations.map((news, index) => (
-                              <div className="col-md-6 mb-4" key={index}>
-                                <div className="card h-100 shadow-sm">
-                                  {news.urlToImage && (
-                                    <img
-                                      src={news.urlToImage}
-                                      className="card-img-top"
-                                      alt={news.title}
-                                      style={{
-                                        height: "200px",
-                                        objectFit: "cover",
-                                      }}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src =
-                                          "https://via.placeholder.com/600x400?text=News+Image";
-                                      }}
-                                    />
-                                  )}
-                                  <div className="card-body">
-                                    <h5 className="card-title">{news.title}</h5>
-                                    <p className="card-text">
-                                      {news.description}
-                                    </p>
-                                    <div className="d-flex mb-2">
-                                      <span className="badge bg-primary me-1">
-                                        {news.source?.name}
-                                      </span>
-                                      {news.country && (
-                                        <span className="badge bg-secondary me-1">
-                                          {countries.find(
-                                            (c) => c.code === news.country
-                                          )?.country || news.country}
+                          <div>
+                            {/* AI Recommendation Card */}
+                            {aiRecommendation && (
+                              <div className="card mb-3 shadow-sm border-0">
+                                <div className="card-header bg-danger bg-opacity-75 text-white d-flex align-items-center py-2">
+                                  <i
+                                    className="bi bi-robot me-2"
+                                    style={{ fontSize: "1rem" }}
+                                  ></i>
+                                  <h6 className="mb-0">
+                                    AI-Generated Recommendations
+                                  </h6>
+                                </div>
+                                <div className="card-body bg-light p-3">
+                                  <div
+                                    className="markdown-content small"
+                                    dangerouslySetInnerHTML={{
+                                      __html: aiRecommendation
+                                        // Pemformatan dasar
+                                        .replace(/\n/g, "<br>")
+                                        .replace(
+                                          /\*\*(.*?)\*\*/g,
+                                          "<strong>$1</strong>"
+                                        )
+                                        .replace(/\*(.*?)\*/g, "<em>$1</em>")
+
+                                        // Format judul utama
+                                        .replace(
+                                          /^# (.*?)$/gm,
+                                          '<h5 class="text-primary fw-bold mb-3">$1</h5>'
+                                        )
+
+                                        // Format judul section dengan garis bawah
+                                        .replace(
+                                          /^## Top Recommendations$/gm,
+                                          '<h6 class="text-danger fw-bold mt-3 mb-3 pb-2 border-bottom">Top Recommendations</h6>'
+                                        )
+                                        .replace(
+                                          /^## (.*?)$/gm,
+                                          '<h6 class="text-danger fw-bold mt-3 mb-3 pb-2 border-bottom">$1</h6>'
+                                        )
+
+                                        // Format artikel dengan kartu yang lebih rapi
+                                        .replace(
+                                          /^### Article #(\d+): (.*?)$/gm,
+                                          '<div class="card mb-2 border-light"><div class="card-header py-2 bg-white"><span class="badge bg-primary me-2">Article $1</span><strong>$2</strong></div><div class="card-body py-2 px-3 small">'
+                                        )
+                                        .replace(
+                                          /^### (.*?)$/gm,
+                                          '<div class="card mb-2 border-light"><div class="card-header py-2 bg-white"><strong>$1</strong></div><div class="card-body py-2 px-3 small">'
+                                        )
+
+                                        // Penutup kartu artikel dan section
+                                        .replace(
+                                          /<br><br><br>/g,
+                                          "</div></div>"
+                                        )
+                                        .replace(
+                                          /<br><br>## /g,
+                                          "</div></div><br>## "
+                                        )
+
+                                        // Format penjelasan yang lebih jelas dengan ikon
+                                        .replace(
+                                          /This article is relevant to your interest/g,
+                                          '<div class="mb-1"><i class="bi bi-check-circle-fill text-success me-1"></i> <strong>Relevance:</strong> '
+                                        )
+                                        .replace(
+                                          /How it connects to/g,
+                                          '</div><div class="mb-1"><i class="bi bi-geo-alt-fill text-info me-1"></i> <strong>Connection:</strong> '
+                                        )
+
+                                        // Format ringkasan yang lebih baik
+                                        .replace(
+                                          /## Summary/g,
+                                          '</div></div><div class="alert alert-info mt-3 mb-0 small"><i class="bi bi-info-circle-fill me-2"></i><strong>Summary:</strong>'
+                                        )
+                                        .replace(
+                                          /(One sentence explaining how these articles match your preferences\.)/g,
+                                          "$1</div>"
+                                        )
+
+                                        // Perbaikan untuk tampilan alternatif (ketika artikel tidak cocok dengan tema)
+                                        .replace(
+                                          /^## Available Recommendations$/gm,
+                                          '<h6 class="text-danger fw-bold mt-3 mb-3 pb-2 border-bottom">Available Recommendations</h6>'
+                                        )
+                                        .replace(
+                                          /^## Note about your preferences$/gm,
+                                          '</div></div><div class="alert alert-warning mt-3 mb-0 small"><i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Note about your preferences:</strong> '
+                                        )
+                                        .replace(
+                                          /Explain that while these don't match the (.*?) theme, we'll notify when more relevant content is available\./g,
+                                          "While these articles don't perfectly match your \"$1\" theme, we'll notify you when more relevant content becomes available.</div>"
+                                        ),
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            )}
+
+                            <h4 className="mb-3">News Articles</h4>
+                            <div className="row">
+                              {newsRecommendations.map((news, index) => (
+                                <div className="col-md-6 mb-4" key={index}>
+                                  <div className="card h-100 shadow-sm">
+                                    {news.urlToImage && (
+                                      <img
+                                        src={news.urlToImage}
+                                        className="card-img-top"
+                                        alt={news.title}
+                                        style={{
+                                          height: "200px",
+                                          objectFit: "cover",
+                                        }}
+                                        onError={(e) => {
+                                          // Prevent infinite error loop
+                                          e.target.onerror = null;
+                                          // Use a data URI as fallback instead of external placeholder
+                                          e.target.src =
+                                            "data:image/svg+xml;charset=UTF-8,%3Csvg width='600' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='600' height='400' fill='%23f8f9fa'/%3E%3Ctext x='50%25' y='50%25' font-size='24' text-anchor='middle' alignment-baseline='middle' font-family='system-ui, sans-serif' fill='%23adb5bd'%3ENo Image Available%3C/text%3E%3C/svg%3E";
+                                        }}
+                                      />
+                                    )}
+                                    <div className="card-body">
+                                      <h5 className="card-title">
+                                        {news.title}
+                                      </h5>
+                                      <p className="card-text">
+                                        {news.description}
+                                      </p>
+                                      <div className="d-flex mb-2">
+                                        <span className="badge bg-primary me-1">
+                                          {news.source?.name}
                                         </span>
-                                      )}
+                                        {news.country && (
+                                          <span className="badge bg-secondary me-1">
+                                            {countries.find(
+                                              (c) => c.code === news.country
+                                            )?.country || news.country}
+                                          </span>
+                                        )}
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="card-footer bg-white d-flex justify-content-between align-items-center">
-                                    <small className="text-muted">
-                                      {news.publishedAt
-                                        ? new Date(
-                                            news.publishedAt
-                                          ).toLocaleDateString()
-                                        : "No date"}
-                                    </small>
-                                    <div>
-                                      <a
-                                        href={news.url || "#"}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="btn btn-sm btn-outline-primary me-1"
-                                      >
-                                        <i className="bi bi-box-arrow-up-right me-1"></i>
-                                        Read
-                                      </a>
-                                      <button className="btn btn-sm btn-outline-success">
-                                        <i className="bi bi-bookmark me-1"></i>
-                                        Save
-                                      </button>
+                                    <div className="card-footer bg-white d-flex justify-content-between align-items-center">
+                                      <small className="text-muted">
+                                        {news.publishedAt
+                                          ? new Date(
+                                              news.publishedAt
+                                            ).toLocaleDateString()
+                                          : "No date"}
+                                      </small>
+                                      <div>
+                                        <a
+                                          href={news.url || "#"}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="btn btn-sm btn-outline-primary me-1"
+                                        >
+                                          <i className="bi bi-box-arrow-up-right me-1"></i>
+                                          Read
+                                        </a>
+                                        <button className="btn btn-sm btn-outline-success">
+                                          <i className="bi bi-bookmark me-1"></i>
+                                          Save
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
 
-                            <div className="d-flex justify-content-between mt-4">
-                              <button
-                                className="btn btn-outline-primary"
-                                onClick={() => setActiveTab("collections")}
-                              >
-                                <i className="bi bi-arrow-left me-1"></i> Back
-                                to Collections
-                              </button>
-                              {newsRecommendations.length > 0 && (
+                              <div className="d-flex justify-content-between mt-4">
                                 <button
-                                  className="btn btn-primary"
-                                  onClick={fetchNewsRecommendations}
+                                  className="btn btn-outline-primary"
+                                  onClick={() => setActiveTab("collections")}
                                 >
-                                  <i className="bi bi-arrow-clockwise me-1"></i>{" "}
-                                  Refresh
+                                  <i className="bi bi-arrow-left me-1"></i> Back
+                                  to Collections
                                 </button>
-                              )}
+                                {newsRecommendations.length > 0 && (
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={fetchNewsRecommendations}
+                                  >
+                                    <i className="bi bi-arrow-clockwise me-1"></i>{" "}
+                                    Refresh
+                                  </button>
+                                )}
+                              </div>
                             </div>
                           </div>
                         )}

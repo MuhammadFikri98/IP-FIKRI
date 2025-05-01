@@ -9,10 +9,8 @@ class GeminiHelper {
     const apiKey = process.env.GEMINI_API;
 
     if (!apiKey) {
-      throw {
-        name: "BadRequest",
-        message: "Gemini API key is not configured",
-      };
+      console.warn("Gemini API key is not configured");
+      return "AI recommendations unavailable - API key not configured. Please contact the administrator.";
     }
 
     try {
@@ -21,7 +19,7 @@ class GeminiHelper {
 
       // Default configuration
       const defaultConfig = {
-        temperature: 0.9,
+        temperature: 0.7, // Slightly reduced for more consistent output
         topK: 32,
         topP: 0.95,
         maxOutputTokens: 1024,
@@ -50,27 +48,41 @@ class GeminiHelper {
         },
       ];
 
-      // Get the model - use gemini-1.5-pro or gemini-1.0-pro instead of gemini-pro
-      // gemini-pro was renamed in newer API versions
-      const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-pro", // Updated model name for newest API
-        generationConfig,
-        safetySettings,
-      });
+      // First try with gemini-1.5-pro model
+      try {
+        const model = genAI.getGenerativeModel({
+          model: "gemini-1.5-pro",
+          generationConfig,
+          safetySettings,
+        });
 
-      // Generate content
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
+        // Generate content
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
 
-      // Return the generated text
-      return response.text();
+        // Return the generated text
+        return response.text();
+      } catch (specificModelError) {
+        console.warn(
+          "Error with gemini-1.5-pro, falling back to gemini-pro:",
+          specificModelError.message
+        );
+
+        // Fallback to gemini-pro if the specified model isn't available
+        const fallbackModel = genAI.getGenerativeModel({
+          model: "gemini-pro",
+          generationConfig,
+          safetySettings,
+        });
+
+        const fallbackResult = await fallbackModel.generateContent(prompt);
+        const fallbackResponse = await fallbackResult.response;
+        return fallbackResponse.text();
+      }
     } catch (error) {
       console.error("Gemini API Error:", error);
-      // Handle and format Gemini API errors
-      throw {
-        name: "BadRequest",
-        message: `Gemini API Error: ${error.message || "Unknown error"}`,
-      };
+      // Return a user-friendly message instead of throwing
+      return "Unable to generate AI recommendation at this time. Please try again later.";
     }
   }
 
