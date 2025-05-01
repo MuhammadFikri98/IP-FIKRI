@@ -1,14 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import countries from "../../../buat di client nanti/country.json";
 import languages from "../../../buat di client nanti/language.json";
 import themes from "../../../buat di client nanti/theme.json";
 import Swal from "sweetalert2";
 import Card from "../components/Card";
+import LoadingAnimation from "../components/LoadingAnimation";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchCollections,
+  createCollection,
+  deleteCollection,
+} from "../store/collectionsSlice";
 
 export default function Home() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState("about"); // "about", "preferences", "collections", "recommendations"
   const [userData, setUserData] = useState({
@@ -21,13 +29,19 @@ export default function Home() {
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
 
-  // Collections state
-  const [collections, setCollections] = useState([]);
+  // Get collections state from Redux
+  const {
+    collections,
+    isLoading,
+    error: collectionsError,
+  } = useSelector((state) => state.collections);
+
   // News recommendations state
   const [newsRecommendations, setNewsRecommendations] = useState([]);
   const [aiRecommendation, setAiRecommendation] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // Add the missing error state
+  const [isRecommendationsLoading, setIsRecommendationsLoading] =
+    useState(false);
 
   useEffect(() => {
     // Check if user is logged in
@@ -42,11 +56,26 @@ export default function Home() {
 
   // Effect to fetch collections when userData.id is available
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token && userData.id) {
-      fetchCollections(token, userData.id);
+    if (userData.id) {
+      dispatch(fetchCollections(userData.id));
     }
-  }, [userData.id]);
+  }, [userData.id, dispatch]);
+
+  // Effect to fetch recommendations when switching to recommendations tab
+  useEffect(() => {
+    if (
+      activeTab === "recommendations" &&
+      collections.length > 0 &&
+      userData.id
+    ) {
+      fetchNewsRecommendations();
+    }
+  }, [activeTab, collections.length, userData.id]);
+
+  // Clear error when changing tabs
+  useEffect(() => {
+    setError(null);
+  }, [activeTab]);
 
   const fetchUserData = async (token) => {
     try {
@@ -61,81 +90,55 @@ export default function Home() {
     }
   };
 
-  const fetchCollections = async (token, userId) => {
-    try {
-      setIsLoading(true);
-
-      // Use proper endpoint with userId parameter
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
-        }/users/${userId}/collections`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setCollections(response.data);
-      setError(null);
-    } catch (error) {
-      console.error("Error fetching collections:", error);
-      setError("Failed to load your collections. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleCreateCollection = async () => {
     // Validate that required properties are selected
     if (!selectedCountry) {
-      setError("Silakan pilih negara terlebih dahulu");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Silakan pilih negara terlebih dahulu",
+        confirmButtonColor: "#d33",
+      });
       return;
     }
 
     if (!selectedLanguage) {
-      setError("Silakan pilih bahasa terlebih dahulu");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Silakan pilih bahasa terlebih dahulu",
+        confirmButtonColor: "#d33",
+      });
       return;
     }
 
     if (!selectedTheme) {
-      setError("Silakan pilih tema terlebih dahulu");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Silakan pilih tema terlebih dahulu",
+        confirmButtonColor: "#d33",
+      });
       return;
     }
 
+    // Properly format the data to meet backend requirements
+    const collectionData = {
+      country: selectedCountry,
+      language: selectedLanguage,
+      theme: selectedTheme,
+    };
+
     try {
-      setIsLoading(true);
-      const token = localStorage.getItem("access_token");
-
-      // Properly format the data to meet backend requirements
-      const collectionData = {
-        country: selectedCountry,
-        language: selectedLanguage,
-        theme: selectedTheme,
-      };
-
-      const response = await axios.post(
-        `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
-        }/collections`,
-        collectionData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      // Dispatch the create collection action
+      await dispatch(createCollection(collectionData)).unwrap();
 
       // Reset form
       setSelectedCountry("");
       setSelectedLanguage("");
       setSelectedTheme("");
 
-      // Refresh collections
-      if (userData.id) {
-        fetchCollections(token, userData.id);
-      }
-
-      // Show success message with SweetAlert2 instead of browser alert
-      setError(null);
-
+      // Show success message with SweetAlert2
       Swal.fire({
         icon: "success",
         title: "Sukses!",
@@ -149,38 +152,47 @@ export default function Home() {
       setActiveTab("recommendations");
       fetchNewsRecommendations();
     } catch (error) {
-      console.error(
-        "Collection creation error:",
-        error.response?.data || error
-      );
+      console.error("Collection creation error:", error);
 
       // Show error message with SweetAlert2
       Swal.fire({
         icon: "error",
         title: "Gagal!",
-        text: error.response?.data?.message || "Gagal membuat koleksi",
+        text: error || "Gagal membuat koleksi",
         confirmButtonColor: "#d33",
       });
-
-      setError(error.response?.data?.message || "Failed to create collection");
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const fetchNewsRecommendations = async () => {
-    setIsLoading(true);
-    setError(null);
+  // Memoize fetchNewsRecommendations to prevent recreation on each render
+  const fetchNewsRecommendations = useCallback(async () => {
+    // Prevent multiple simultaneous requests
+    if (isRecommendationsLoading) {
+      console.log("Already loading recommendations, ignoring request");
+      return;
+    }
 
     try {
+      console.log("Fetching news recommendations...");
+      setIsRecommendationsLoading(true);
+      setError(null); // Clear any previous errors
+
       const token = localStorage.getItem("access_token");
+      if (!token) {
+        setError("You need to be logged in to get recommendations");
+        setIsRecommendationsLoading(false);
+        return;
+      }
 
       // Check if user has collections first
-      if (collections.length === 0) {
-        setError(
-          "Anda perlu membuat koleksi terlebih dahulu untuk mendapatkan rekomendasi berita personal"
-        );
-        setIsLoading(false);
+      if (!collections || collections.length === 0) {
+        Swal.fire({
+          icon: "warning",
+          title: "Perhatian!",
+          text: "Anda perlu membuat koleksi terlebih dahulu untuk mendapatkan rekomendasi berita personal",
+          confirmButtonColor: "#1a3a6c",
+        });
+        setIsRecommendationsLoading(false);
         return;
       }
 
@@ -245,9 +257,10 @@ export default function Home() {
         );
       }
     } finally {
-      setIsLoading(false);
+      console.log("Finished loading recommendations");
+      setIsRecommendationsLoading(false);
     }
-  };
+  }, [collections, isRecommendationsLoading]);
 
   // Debug function
   const checkAndClearToken = () => {
@@ -283,23 +296,8 @@ export default function Home() {
         return;
       }
 
-      setIsLoading(true);
-      const token = localStorage.getItem("access_token");
-
-      // Panggil API untuk menghapus koleksi
-      await axios.delete(
-        `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
-        }/collections/${collectionId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      // Perbarui daftar koleksi setelah berhasil menghapus
-      if (userData.id) {
-        fetchCollections(token, userData.id);
-      }
+      // Use Redux dispatch instead of local state
+      await dispatch(deleteCollection(collectionId)).unwrap();
 
       // Tampilkan notifikasi sukses
       Swal.fire({
@@ -320,8 +318,6 @@ export default function Home() {
         text: error.response?.data?.message || "Gagal menghapus koleksi",
         confirmButtonColor: "#d33",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -377,6 +373,7 @@ export default function Home() {
                           window.scrollTo({ top: 600, behavior: "smooth" });
                         }}
                         className="btn btn-outline-light btn-lg px-4"
+                        disabled={isRecommendationsLoading}
                       >
                         <i className="bi bi-newspaper me-2"></i>View
                         Recommendations
@@ -832,9 +829,9 @@ export default function Home() {
                           Create collections to organize news by your interests.
                         </p>
 
-                        {error && (
+                        {collectionsError && (
                           <div className="alert alert-danger" role="alert">
-                            {error}
+                            {collectionsError}
                           </div>
                         )}
 
@@ -881,18 +878,43 @@ export default function Home() {
                               disabled={
                                 !selectedCountry ||
                                 !selectedLanguage ||
-                                !selectedTheme
+                                !selectedTheme ||
+                                isLoading
                               }
                             >
-                              <i className="bi bi-plus-circle me-1"></i> Buat
-                              Koleksi
+                              {isLoading ? (
+                                <>
+                                  <span
+                                    className="spinner-border spinner-border-sm me-2"
+                                    role="status"
+                                    aria-hidden="true"
+                                  ></span>
+                                  Processing...
+                                </>
+                              ) : (
+                                <>
+                                  <i className="bi bi-plus-circle me-1"></i>{" "}
+                                  Buat Koleksi
+                                </>
+                              )}
                             </button>
                           </div>
                         </div>
 
                         {/* Existing Collections */}
                         <h5 className="mb-3">Your Collections</h5>
-                        {collections.length === 0 ? (
+                        {isLoading ? (
+                          <div className="text-center py-3">
+                            <div
+                              className="spinner-border text-primary"
+                              role="status"
+                            >
+                              <span className="visually-hidden">
+                                Loading collections...
+                              </span>
+                            </div>
+                          </div>
+                        ) : collections.length === 0 ? (
                           <div className="alert alert-light text-center">
                             <i className="bi bi-folder me-2"></i>
                             You don't have any collections yet. Create one to
@@ -908,19 +930,9 @@ export default function Home() {
                                 <Card
                                   collection={collection}
                                   index={index}
-                                  onDelete={(collectionId) => {
-                                    // Perbarui daftar koleksi secara lokal (opsional)
-                                    setCollections(
-                                      collections.filter(
-                                        (c) => c.id !== collectionId
-                                      )
-                                    );
-                                  }}
                                   onRefresh={() => {
-                                    const token =
-                                      localStorage.getItem("access_token");
                                     if (userData.id) {
-                                      fetchCollections(token, userData.id);
+                                      dispatch(fetchCollections(userData.id));
                                     }
                                   }}
                                 />
@@ -953,20 +965,8 @@ export default function Home() {
                           </div>
                         )}
 
-                        {isLoading ? (
-                          <div className="text-center py-5">
-                            <div
-                              className="spinner-border text-primary"
-                              role="status"
-                            >
-                              <span className="visually-hidden">
-                                Loading...
-                              </span>
-                            </div>
-                            <p className="mt-3">
-                              Generating your personalized news feed...
-                            </p>
-                          </div>
+                        {isRecommendationsLoading ? (
+                          <LoadingAnimation />
                         ) : newsRecommendations.length === 0 ? (
                           <div className="alert alert-info">
                             <i className="bi bi-info-circle me-2"></i>
@@ -1172,9 +1172,23 @@ export default function Home() {
                                   <button
                                     className="btn btn-primary"
                                     onClick={fetchNewsRecommendations}
+                                    disabled={isRecommendationsLoading}
                                   >
-                                    <i className="bi bi-arrow-clockwise me-1"></i>{" "}
-                                    Refresh
+                                    {isRecommendationsLoading ? (
+                                      <>
+                                        <span
+                                          className="spinner-border spinner-border-sm me-2"
+                                          role="status"
+                                          aria-hidden="true"
+                                        ></span>
+                                        Loading...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <i className="bi bi-arrow-clockwise me-1"></i>{" "}
+                                        Refresh
+                                      </>
+                                    )}
                                   </button>
                                 )}
                               </div>

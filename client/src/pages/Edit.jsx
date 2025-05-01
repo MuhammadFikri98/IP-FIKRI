@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import countries from "../../../buat di client nanti/country.json";
 import languages from "../../../buat di client nanti/language.json";
 import themes from "../../../buat di client nanti/theme.json";
 import Swal from "sweetalert2";
+import {
+  fetchCollectionById,
+  updateCollection,
+} from "../store/collectionsSlice";
 
 export default function Edit() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  // Get collection state from Redux
+  const { isLoading, error, currentCollection } = useSelector(
+    (state) => state.collections
+  );
 
   // Collection data
   const [collection, setCollection] = useState({
@@ -21,63 +29,34 @@ export default function Edit() {
 
   // Fetch collection data on component mount
   useEffect(() => {
-    fetchCollectionData();
-  }, [id]);
-
-  const fetchCollectionData = async () => {
-    try {
-      setIsLoading(true);
-      const token = localStorage.getItem("access_token");
-
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
-        }/collections/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setCollection(response.data);
-    } catch (error) {
-      console.error(
-        "Error fetching collection:",
-        error.response?.data || error
-      );
-      setError("Gagal mengambil data koleksi. Silakan coba lagi.");
-
-      Swal.fire({
-        icon: "error",
-        title: "Gagal!",
-        text: "Tidak dapat mengambil data koleksi",
-        confirmButtonColor: "#d33",
-      });
-    } finally {
-      setIsLoading(false);
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      navigate("/login");
+      return;
     }
-  };
+
+    dispatch(fetchCollectionById(id))
+      .unwrap()
+      .then((data) => {
+        setCollection(data);
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Tidak dapat mengambil data koleksi",
+          confirmButtonColor: "#d33",
+        });
+      });
+  }, [id, dispatch, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      setIsLoading(true);
-      const token = localStorage.getItem("access_token");
-
-      await axios.put(
-        `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
-        }/collections/${id}`,
-        collection,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await dispatch(
+        updateCollection({ id, collectionData: collection })
+      ).unwrap();
 
       Swal.fire({
         icon: "success",
@@ -91,21 +70,14 @@ export default function Edit() {
       // Redirect back to home page after successful update
       navigate("/");
     } catch (error) {
-      console.error(
-        "Error updating collection:",
-        error.response?.data || error
-      );
+      console.error("Error updating collection:", error);
 
       Swal.fire({
         icon: "error",
         title: "Gagal!",
-        text: error.response?.data?.message || "Gagal memperbarui koleksi",
+        text: error || "Gagal memperbarui koleksi",
         confirmButtonColor: "#d33",
       });
-
-      setError(error.response?.data?.message || "Gagal memperbarui koleksi");
-    } finally {
-      setIsLoading(false);
     }
   };
 

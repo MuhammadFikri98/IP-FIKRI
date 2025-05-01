@@ -1,11 +1,15 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import countries from "../../../buat di client nanti/country.json";
 import languages from "../../../buat di client nanti/language.json";
+import { deleteCollection } from "../store/collectionsSlice";
 
-export default function Card({ collection, index, onDelete, onRefresh }) {
+export default function Card({ collection, index, onRefresh }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleDeleteCollection = async (collectionId) => {
     try {
       // Konfirmasi penghapusan dengan SweetAlert2
@@ -25,26 +29,8 @@ export default function Card({ collection, index, onDelete, onRefresh }) {
         return;
       }
 
-      const token = localStorage.getItem("access_token");
-
-      // Panggil API untuk menghapus koleksi
-      await fetch(
-        `${
-          import.meta.env.VITE_API_URL || "http://localhost:3000"
-        }/collections/${collectionId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Panggil fungsi callback untuk memperbarui data
-      if (onDelete) {
-        onDelete(collectionId);
-      }
+      // Dispatch the delete collection action
+      await dispatch(deleteCollection(collectionId)).unwrap();
 
       // Panggil fungsi refresh jika ada
       if (onRefresh) {
@@ -67,7 +53,7 @@ export default function Card({ collection, index, onDelete, onRefresh }) {
       Swal.fire({
         icon: "error",
         title: "Gagal!",
-        text: error.response?.data?.message || "Gagal menghapus koleksi",
+        text: error || "Gagal menghapus koleksi",
         confirmButtonColor: "#d33",
       });
     }
