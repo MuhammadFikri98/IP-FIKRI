@@ -23,7 +23,7 @@ _Collection_
 ## Base URL
 
 ```
-http://localhost:3000
+https://ip-fikri-59c31.web.app/
 ```
 
 ## Authentication
