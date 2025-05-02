@@ -199,7 +199,7 @@ export default function Home() {
       // Get recommendations from the server
       const response = await axios.get(
         `${
-          import.meta.env.VITE_API_URL || "https://ip-fikri-server.fikri.fun"
+          import.meta.env.VITE_API_URL || "https://ip-fikri-server.fikri.fun/"
         }/news/recommendations`,
         {
           headers: { Authorization: `Bearer ${token}` },
